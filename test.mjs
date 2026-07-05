@@ -128,3 +128,10 @@ T('place/unplace/progress/isDirty + unnamed negeneruje karty', () => {
   assert.deepEqual(plain(ctx.progress(s)), { placed: 0, total: 4 });
 });
 console.log('TASK2 OK');
+
+T('kusy: české plurály', () => {
+  assert.equal(ctx.kusy(1), 'kus');
+  assert.equal(ctx.kusy(2), 'kusy'); assert.equal(ctx.kusy(4), 'kusy');
+  assert.equal(ctx.kusy(5), 'kusů'); assert.equal(ctx.kusy(12), 'kusů');
+});
+console.log('TASK9 OK');

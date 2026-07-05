@@ -4,7 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Obsahový kalendář — naplánuj si měsíc obsahu | Marian Vlk</title>
-<meta name="description" content="Zdarma nástroj: navol si pilíře obsahu, rozvrhni měsíc a vytiskni si plán. Bez registrace, bez ukládání.">
+<meta name="description" content="Nástroj zdarma: navolíš si pilíře obsahu, rozložíš je do měsíce a vytiskneš si plán. Bez registrace.">
+<meta property="og:title" content="Obsahový kalendář — naplánuj si měsíc obsahu">
+<meta property="og:description" content="Nástroj zdarma: navolíš si pilíře obsahu, rozložíš je do měsíce a vytiskneš si plán. Bez registrace.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kalendar.vlkmar.cz/">
+<meta property="og:locale" content="cs_CZ">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23980323'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='26' fill='%23F4F3EA' text-anchor='middle'%3EVM%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -450,7 +456,7 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
   <div class="monogram" aria-hidden="true">VM</div>
   <div class="masthead-title">
     <h1>Obsahový <em>kalendář</em></h1>
-    <p class="tagline">Naplánuj si měsíc obsahu na jedno posezení</p>
+    <p class="tagline">Zdarma a bez registrace</p>
   </div>
   <nav class="steps" aria-label="Kroky">
     <span class="step on" data-step="mix"><b>01</b> <span class="lbl">Mix</span></span>
@@ -680,6 +686,10 @@ function isDirty(state) {
     || state.cards.some(c => c.date !== null)
     || state.cards.some(c => c.idea.trim().length > 0);
 }
+
+function kusy(n) {
+  return n === 1 ? 'kus' : (n >= 2 && n <= 4 ? 'kusy' : 'kusů');
+}
 /* LOGIC-END */
 
 /* ========== UI ========== */
@@ -738,17 +748,17 @@ function renderMix() {
       <section class="rise">
         <h2 class="lede">Naplánuj si celý měsíc obsahu <em>na jedno posezení</em>.</h2>
         <p class="intro-sub">Nejdřív si navolíš, co tvoříš a v jakém poměru. Pak to rozložíš do kalendáře
-        a vytiskneš. Zabere to zhruba půl hodiny — a nic se tu neukládá, hotový plán si na konci stáhneš jako PDF.</p>
+        a vytiskneš. Zabere to zhruba půl hodiny. A nic se tu neukládá, hotový plán si na konci stáhneš jako PDF.</p>
       </section>
 
       <div class="sec-label rise" style="animation-delay:60ms"><span class="n">01</span> Tři role obsahu</div>
       <section class="roles rise" style="animation-delay:90ms">
         <div class="role-line"><span class="role-swatch f-dosah" style="background:var(--ink)"></span><b>Dosah</b><span>zastaví lidi, kteří tě ještě neznají</span></div>
-        <div class="role-line"><span class="role-swatch" style="background:rgba(31,29,24,.42)"></span><b>Důvěra</b><span>ukazuje, jak přemýšlíš; lidi se vracejí</span></div>
+        <div class="role-line"><span class="role-swatch" style="background:rgba(31,29,24,.42)"></span><b>Důvěra</b><span>ukazuje, jak přemýšlíš, a lidi se vracejí</span></div>
         <div class="role-line"><span class="role-swatch" style="background:var(--crimson)"></span><b>Prodej</b><span>říká si o akci: poptávku, e-mail, nákup</span></div>
       </section>
 
-      <div class="sec-label" style="animation-delay:120ms"><span class="n">02</span> Tvoje pilíře <span class="sec-hint">— ideálně 3–5, každý = téma + podoba</span></div>
+      <div class="sec-label" style="animation-delay:120ms"><span class="n">02</span> Tvoje pilíře <span class="sec-hint">· ideálně 3–5 · pilíř = téma + podoba</span></div>
       <section id="pillar-list">${rows}</section>
       <div class="add-row">
         <button type="button" class="add-pillar" id="add-pillar" ${state.pillars.length >= MAX_PILLARS ? 'disabled' : ''}>Přidat pilíř</button>
@@ -776,7 +786,7 @@ function renderSummary() {
     <div class="summary">
       <div class="sum-total">
         <span class="n-big num">${fb.total}</span>
-        <span class="n-cap">kusů měsíčně</span>
+        <span class="n-cap">${kusy(fb.total)} měsíčně</span>
       </div>
       <div class="fwrap">
         ${bar}
@@ -816,7 +826,7 @@ function bindMix() {
       }
       if (e.target.classList.contains('p-del')) {
         const placed = state.cards.filter(c => c.pillarId === id && c.date !== null).length;
-        if (placed > 0 && !confirm('Pilíř má ' + placed + ' kusů v kalendáři. Smazat i s nimi?')) return;
+        if (placed > 0 && !confirm('Pilíř má v kalendáři ' + placed + ' ' + kusy(placed) + '. Smazat i s nimi?')) return;
         removePillar(state, id); syncCards(state); renderMix(); return;
       }
     }
@@ -856,7 +866,7 @@ function chipHtml(c) {
   const idea = c.idea.trim();
   return `<button type="button" class="chip" data-card="${c.id}" style="--c:${p.color}">
     <span class="ch-pillar">${esc(pillarLabel(state, p))}</span>
-    <span class="ch-idea${idea ? '' : ' empty'}">${idea ? esc(idea) : 'klepni a napiš nápad'}</span>
+    <span class="ch-idea${idea ? '' : ' empty'}">${idea ? esc(idea) : 'zatím bez nápadu'}</span>
     ${c.format ? `<span class="ch-format">${FORMATS[c.format]}</span>` : ''}
   </button>`;
 }
@@ -874,11 +884,11 @@ function renderCal() {
     if (!c) return '<div class="cell off" aria-hidden="true"></div>';
     const chips = placedForDate(state, c.iso).map(chipHtml).join('');
     return `<div class="cell${c.iso === today ? ' today' : ''}" data-iso="${c.iso}" role="button" tabindex="0"
-      aria-label="${c.day}. den — přidat kus">${chips}<span class="cell-add num">+</span><span class="cell-day num">${c.day}</span></div>`;
+      aria-label="${c.day}. den, přidat kus">${chips}<span class="cell-add num">+</span><span class="cell-day num">${c.day}</span></div>`;
   };
 
   const trayHtml = groups.length === 0
-    ? `<div class="tray-empty">Všechny kusy už jsou v kalendáři. Přidat další můžeš v&nbsp;mixu — <button type="button" data-go="mix">← Upravit mix</button></div>`
+    ? `<div class="tray-empty">Všechny kusy už jsou v kalendáři. <button type="button" data-go="mix">Přidat další v mixu</button></div>`
     : `<div class="tray">${groups.map(g => `
         <button type="button" class="tcard${pendingCard && pendingCard.pillarId === g.pillar.id ? ' picked' : ''}"
           data-pick="${g.firstCardId}" style="--c:${g.pillar.color}">
@@ -889,7 +899,7 @@ function renderCal() {
     const dowIdx = (meta.offset + c.day - 1) % 7;
     return `
     <div class="a-day${c.iso === today ? ' today' : ''}" data-iso="${c.iso}">
-      <div class="a-head" role="button" tabindex="0" aria-label="${c.day}. den — přidat kus">
+      <div class="a-head" role="button" tabindex="0" aria-label="${c.day}. den, přidat kus">
         <span class="a-num num">${String(c.day).padStart(2, '0')}</span>
         <span class="a-dow${dowIdx >= 5 ? ' we' : ''}">${['PO', 'ÚT', 'ST', 'ČT', 'PÁ', 'SO', 'NE'][dowIdx]}</span>
         <span class="a-plus num" aria-hidden="true">+</span>
@@ -908,7 +918,7 @@ function renderCal() {
       </div>
       <button type="button" class="btn btn-primary btn-sm" id="do-print">Exportovat PDF</button>
     </div>
-    ${pendingCard ? `<div class="placing-bar">Klepni na den, kam chceš umístit
+    ${pendingCard ? `<div class="placing-bar">Teď vyber den pro
       „${esc(pillarLabel(state, getPillar(state, pendingCard.pillarId)))}".
       <button type="button" id="cancel-pick">zrušit</button></div>` : ''}
     <section class="tray-wrap">
@@ -981,7 +991,7 @@ function openCardModal(cardId) {
           <h3>${esc(pillarLabel(state, p))} <em style="color:var(--ink-45)">· ${fmtDayLabel(c.date)}</em></h3>
           <button type="button" class="ph-close" data-close="1" aria-label="Zavřít">×</button>
         </div>
-        <label class="f-lbl" for="idea-in">Nápad — o čem to bude?</label>
+        <label class="f-lbl" for="idea-in">O čem to bude?</label>
         <textarea id="idea-in" class="idea-input" maxlength="220"
           placeholder="např. 3 chyby, které vidím v každé druhé kampani">${esc(c.idea)}</textarea>
         <label class="f-lbl">Formát <span style="opacity:.55">(nepovinné)</span></label>
@@ -1121,7 +1131,7 @@ function renderPrintSheet() {
         <div class="pg-title">Obsahový <em>kalendář</em></div>
         <div class="pg-month">${meta.label}</div>
       </div>
-      <div class="pg-total"><b>${fb.total}</b>kusů obsahu</div>
+      <div class="pg-total"><b>${fb.total}</b>${kusy(fb.total)} obsahu</div>
     </div>
     <div class="pg-legend">
       ${named.map(p => `<span class="pg-leg"><span class="sq" style="background:${p.color}"></span>
@@ -1132,17 +1142,25 @@ function renderPrintSheet() {
     <div class="pg-grid">${grid.map(cellHtml).join('')}${'<div class="pg-cell off"></div>'.repeat(pad)}</div>
     <div class="pg-foot">
       <span>Marian Vlk · vlkmar.cz</span>
-      <span class="fr">Vytištěno z nástroje Obsahový kalendář — kalendar.vlkmar.cz</span>
+      <span class="fr">Obsahový kalendář · kalendar.vlkmar.cz</span>
     </div>`;
 }
 
 function doPrint() {
   const left = trayCards(state).length;
-  if (left > 0 && !confirm('V zásobníku ti zbývá ' + left + ' kusů. Vytisknout kalendář i tak?')) return;
+  if (left > 0) {
+    const msg = left === 1 ? 'V zásobníku ti zbývá poslední kus.'
+      : left <= 4 ? 'V zásobníku ti zbývají ještě ' + left + ' kusy.'
+      : 'V zásobníku ti zbývá ještě ' + left + ' kusů.';
+    if (!confirm(msg + ' Vytisknout kalendář i tak?')) return;
+  }
   renderPrintSheet();
   window.print();
 }
 window.addEventListener('beforeprint', renderPrintSheet);
+window.addEventListener('beforeunload', e => {
+  if (isDirty(state)) { e.preventDefault(); e.returnValue = ''; }
+});
 
 /* ---------- INIT ---------- */
 function localTodayIso() {
