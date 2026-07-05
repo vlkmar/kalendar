@@ -102,6 +102,128 @@ function syncCards(state) {
 function namedPillars(state) {
   return state.pillars.filter(p => p.name.trim().length > 0);
 }
+
+var MONTHS_CZ = ['Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec'];
+var FUNNEL_ORDER = ['dosah', 'duvera', 'prodej'];
+
+function addMonths(ym, delta) {
+  const [y, m] = ym.split('-').map(Number);
+  const idx = m - 1 + delta;
+  const ny = y + Math.floor(idx / 12);
+  const nm = ((idx % 12) + 12) % 12 + 1;
+  return ny + '-' + String(nm).padStart(2, '0');
+}
+
+function monthMeta(ym) {
+  const [y, m] = ym.split('-').map(Number);
+  const days = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  const offset = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7; // 0 = pondělí
+  return { label: MONTHS_CZ[m - 1] + ' ' + y, days, offset, year: y, month: m };
+}
+
+function monthGrid(ym) {
+  const { days, offset } = monthMeta(ym);
+  const cells = [];
+  for (let i = 0; i < offset; i++) cells.push(null);
+  for (let d = 1; d <= days; d++) {
+    cells.push({ iso: ym + '-' + String(d).padStart(2, '0'), day: d });
+  }
+  return cells;
+}
+
+function pillarLabel(state, pillar) {
+  return pillar.name.trim() || 'Pilíř ' + (state.pillars.indexOf(pillar) + 1);
+}
+
+function funnelBreakdown(state) {
+  const counts = { dosah: 0, duvera: 0, prodej: 0 };
+  for (const p of state.pillars) counts[p.funnel] += p.count;
+  const total = counts.dosah + counts.duvera + counts.prodej;
+  let rows = FUNNEL_ORDER.map(f => ({ funnel: f, count: counts[f], pct: 0, rem: 0 }));
+  if (total > 0) {
+    for (const r of rows) {
+      const exact = r.count * 100 / total;
+      r.pct = Math.floor(exact);
+      r.rem = exact - r.pct;
+    }
+    let leftover = 100 - rows.reduce((s, r) => s + r.pct, 0);
+    const byRem = [...rows].sort((a, b) => b.rem - a.rem || FUNNEL_ORDER.indexOf(a.funnel) - FUNNEL_ORDER.indexOf(b.funnel));
+    for (let i = 0; leftover > 0; i = (i + 1) % byRem.length, leftover--) byRem[i].pct += 1;
+  }
+  return { total, rows: rows.map(({ funnel, count, pct }) => ({ funnel, count, pct })) };
+}
+
+function guardrails(state) {
+  const out = [];
+  const fb = funnelBreakdown(state);
+  const prodej = fb.rows.find(r => r.funnel === 'prodej');
+  if (fb.total > 0 && prodej.count / fb.total > 0.15) {
+    out.push({
+      id: 'prodej-high',
+      message: 'Prodej máš přes 15 %. Osvědčený poměr: na zhruba deset kusů, kde jen dáváš, patří jeden, kde si o něco říkáš.'
+    });
+  }
+  const low = state.pillars.filter(p => p.count < 4);
+  if (low.length > 0) {
+    out.push({
+      id: 'pillar-low',
+      message: low.map(p => pillarLabel(state, p)).join(', ') + ': méně než 4 kusy za měsíc. Z tak malého vzorku nepoznáš, jestli pilíř funguje.'
+    });
+  }
+  const days = monthMeta(state.viewMonth).days;
+  if (fb.total > days) {
+    out.push({
+      id: 'over-days',
+      message: 'Máš naplánováno víc kusů (' + fb.total + ') než má měsíc dní (' + days + '). Nech si rezervu, nebo něco uber.'
+    });
+  }
+  return out;
+}
+
+function getCard(state, id) {
+  return state.cards.find(c => c.id === id) || null;
+}
+
+function placeCard(state, cardId, iso) {
+  const c = getCard(state, cardId);
+  if (c) c.date = iso;
+}
+
+function unplaceCard(state, cardId) {
+  const c = getCard(state, cardId);
+  if (c) c.date = null;
+}
+
+function setIdea(state, cardId, text) {
+  const c = getCard(state, cardId);
+  if (c) c.idea = text;
+}
+
+function setFormat(state, cardId, f) {
+  const c = getCard(state, cardId);
+  if (c) c.format = (f === null || FORMATS[f]) ? f : c.format;
+}
+
+function trayCards(state) {
+  const order = new Map(state.pillars.map((p, i) => [p.id, i]));
+  return state.cards
+    .filter(c => c.date === null)
+    .sort((a, b) => (order.get(a.pillarId) - order.get(b.pillarId)) || (a.id - b.id));
+}
+
+function placedForDate(state, iso) {
+  return state.cards.filter(c => c.date === iso).sort((a, b) => a.id - b.id);
+}
+
+function progress(state) {
+  return { placed: state.cards.filter(c => c.date !== null).length, total: state.cards.length };
+}
+
+function isDirty(state) {
+  return namedPillars(state).length > 0
+    || state.cards.some(c => c.date !== null)
+    || state.cards.some(c => c.idea.trim().length > 0);
+}
 /* LOGIC-END */
 /* UI v Tasku 4+ */
 </script>

@@ -62,3 +62,65 @@ T('barvy se recyklují podle indexu po smazání', () => {
   assert.equal(c.color, ctx.PILLAR_COLORS[0], 'uvolněná barva se použije znovu');
 });
 console.log('TASK1 OK');
+
+T('monthMeta: Srpen 2026 = 31 dní, 1.8. sobota → offset 5', () => {
+  const m = ctx.monthMeta('2026-08');
+  assert.equal(m.label, 'Srpen 2026'); assert.equal(m.days, 31); assert.equal(m.offset, 5);
+});
+T('monthMeta: Září 2026 = 30 dní, 1.9. úterý → offset 1', () => {
+  const m = ctx.monthMeta('2026-09');
+  assert.equal(m.days, 30); assert.equal(m.offset, 1);
+});
+T('monthGrid: offset nullů + ISO klíče', () => {
+  const g = ctx.monthGrid('2026-08');
+  assert.equal(g.length, 5 + 31);
+  assert.equal(g[0], null); assert.equal(g[4], null);
+  assert.deepEqual(g[5], { iso: '2026-08-01', day: 1 });
+  assert.deepEqual(g[35], { iso: '2026-08-31', day: 31 });
+});
+T('addMonths přes přelom roku oběma směry', () => {
+  assert.equal(ctx.addMonths('2026-12', 1), '2027-01');
+  assert.equal(ctx.addMonths('2026-01', -1), '2025-12');
+});
+T('funnelBreakdown: largest remainder, součet 100', () => {
+  const s = ctx.createState('2026-07-05');
+  const a = ctx.addPillar(s), b = ctx.addPillar(s), c = ctx.addPillar(s);
+  [a, b, c].forEach(p => { while (p.count > 1) { ctx.decCount(s, p.id); } });
+  ctx.setFunnel(s, b.id, 'duvera'); ctx.setFunnel(s, c.id, 'prodej'); ctx.syncCards(s);
+  const fb = ctx.funnelBreakdown(s);
+  assert.equal(fb.total, 3);
+  const pcts = fb.rows.map(r => r.pct);
+  assert.equal(pcts.reduce((x, y) => x + y, 0), 100);
+  assert.deepEqual([...pcts].sort((x, y) => y - x), [34, 33, 33]);
+});
+T('guardrails: prodej-high přes 15 %, pillar-low, over-days', () => {
+  const s = ctx.createState('2026-07-05');
+  const a = ctx.addPillar(s); ctx.renamePillar(s, a.id, 'Návody');
+  const b = ctx.addPillar(s); ctx.renamePillar(s, b.id, 'Nabídka'); ctx.setFunnel(s, b.id, 'prodej');
+  ctx.decCount(s, b.id); ctx.decCount(s, b.id); ctx.decCount(s, b.id);
+  ctx.syncCards(s);
+  const ids = ctx.guardrails(s).map(g => g.id);
+  assert.ok(ids.includes('prodej-high'));
+  assert.ok(ids.includes('pillar-low'), 'Nabídka má 1 kus');
+  assert.ok(!ids.includes('over-days'));
+  const low = ctx.guardrails(s).find(g => g.id === 'pillar-low');
+  assert.ok(low.message.includes('Nabídka') && !low.message.includes('Návody'));
+  for (let i = 0; i < 30; i++) ctx.incCount(s, a.id);
+  ctx.syncCards(s);
+  assert.ok(ctx.guardrails(s).map(g => g.id).includes('over-days'));
+});
+T('place/unplace/progress/isDirty', () => {
+  const s = ctx.createState('2026-07-05');
+  assert.equal(ctx.isDirty(s), false);
+  const p = ctx.addPillar(s); ctx.syncCards(s);
+  assert.equal(ctx.isDirty(s), false, 'nepojmenovaný pilíř bez umístění není dirty');
+  ctx.renamePillar(s, p.id, 'Série');
+  assert.equal(ctx.isDirty(s), true);
+  const card = ctx.trayCards(s)[0];
+  ctx.placeCard(s, card.id, '2026-08-03');
+  assert.deepEqual(ctx.progress(s), { placed: 1, total: 4 });
+  assert.equal(ctx.placedForDate(s, '2026-08-03').length, 1);
+  ctx.unplaceCard(s, card.id);
+  assert.deepEqual(ctx.progress(s), { placed: 0, total: 4 });
+});
+console.log('TASK2 OK');
