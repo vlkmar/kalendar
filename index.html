@@ -129,6 +129,93 @@ main[hidden] { display: none; }
 
 #print-sheet { display: none; }
 
+/* ========== MIX VIEW ========== */
+.lede { font-size: clamp(26px, 4vw, 34px); max-width: 620px; }
+.lede em { color: var(--crimson); }
+.intro-sub { max-width: 560px; color: var(--ink-70); font-size: 15px; margin-top: 10px; }
+
+.roles { border: var(--hair); border-left: 3px solid var(--ink); padding: 4px 0; background: rgba(255, 255, 255, .35); }
+.role-line { display: flex; align-items: baseline; gap: 12px; padding: 9px 16px; }
+.role-line + .role-line { border-top: var(--hair); }
+.role-swatch { width: 11px; height: 11px; flex: none; transform: translateY(1px); }
+.role-line b { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; min-width: 74px; }
+.role-line span { color: var(--ink-70); font-size: 14.5px; }
+
+.sec-hint { font-weight: 400; letter-spacing: .06em; color: var(--ink-45); text-transform: none; }
+
+.pillar-row { display: flex; gap: 14px; padding: 18px 2px 16px; border-bottom: var(--hair); }
+.p-dot { width: 13px; height: 13px; flex: none; margin-top: 13px; background: var(--c); box-shadow: 1.5px 1.5px 0 rgba(31, 29, 24, .2); }
+.p-main { flex: 1; min-width: 0; }
+.p-name {
+  width: 100%; border: none; background: transparent;
+  font-family: var(--serif); font-size: 20px;
+  padding: 2px 0 6px;
+  border-bottom: 1px dashed var(--ink-14);
+  border-radius: 0;
+}
+.p-name::placeholder { color: var(--ink-45); font-style: italic; }
+.p-name:focus { outline: none; border-bottom: 1px solid var(--crimson); }
+.p-controls { display: flex; align-items: center; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+
+.seg { display: inline-flex; border: 1px solid var(--ink-14); border-radius: 3px; overflow: hidden; }
+.seg-btn {
+  font-family: var(--mono); font-size: 11.5px; font-weight: 400; letter-spacing: .07em; text-transform: uppercase;
+  padding: 6px 12px; color: var(--ink-45);
+  transition: background .12s, color .12s;
+}
+.seg-btn + .seg-btn { border-left: 1px solid var(--ink-14); }
+.seg-btn:hover { color: var(--ink); background: rgba(31, 29, 24, .04); }
+.seg-btn.on { background: var(--ink); color: var(--paper); font-weight: 700; }
+
+.stepper { display: inline-flex; align-items: center; border: 1px solid var(--ink-14); border-radius: 3px; }
+.st-btn { width: 30px; height: 30px; font-size: 16px; color: var(--ink-70); line-height: 1; }
+.st-btn:hover:not(:disabled) { background: rgba(31, 29, 24, .06); color: var(--ink); }
+.st-btn:disabled { opacity: .25; cursor: not-allowed; }
+.st-num { min-width: 34px; text-align: center; font-size: 14.5px; font-weight: 700; border-left: 1px solid var(--ink-14); border-right: 1px solid var(--ink-14); align-self: stretch; display: flex; align-items: center; justify-content: center; }
+.st-cap { font-size: 12.5px; color: var(--ink-45); }
+
+.p-del { margin-left: auto; width: 30px; height: 30px; color: var(--ink-45); font-size: 17px; border-radius: 3px; }
+.p-del:hover { color: var(--crimson); background: rgba(152, 3, 35, .07); }
+
+.add-row { padding: 14px 2px; }
+.add-pillar { color: var(--ink-70); font-weight: 700; font-size: 14px; display: inline-flex; gap: 8px; align-items: center; }
+.add-pillar::before { content: '+'; font-family: var(--mono); font-size: 16px; color: var(--crimson); }
+.add-pillar:hover:not(:disabled) { color: var(--ink); }
+.add-pillar:disabled { opacity: .4; cursor: not-allowed; }
+
+.summary { display: grid; grid-template-columns: auto 1fr; gap: 8px 38px; align-items: end; }
+.sum-total .n-big { font-size: 46px; font-weight: 700; line-height: 1; display: block; }
+.sum-total .n-cap { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-45); }
+.fwrap { display: flex; flex-direction: column; gap: 9px; }
+.fbar { display: flex; height: 15px; border: 1px solid var(--ink-14); background: rgba(255, 255, 255, .4); }
+.fbar-seg { transition: width .3s ease; }
+.fbar-seg.f-dosah { background: var(--ink); }
+.fbar-seg.f-duvera { background: rgba(31, 29, 24, .42); }
+.fbar-seg.f-prodej { background: var(--crimson); }
+.frows { display: flex; gap: 26px; flex-wrap: wrap; }
+.frow { display: flex; align-items: baseline; gap: 8px; font-size: 13px; color: var(--ink-70); }
+.frow .sw { width: 9px; height: 9px; flex: none; transform: translateY(.5px); }
+.frow .sw.f-dosah { background: var(--ink); }
+.frow .sw.f-duvera { background: rgba(31, 29, 24, .42); }
+.frow .sw.f-prodej { background: var(--crimson); }
+.frow .pc { font-family: var(--mono); font-weight: 700; font-size: 14px; color: var(--ink); }
+
+.guard {
+  border-left: 3px solid var(--crimson);
+  padding: 8px 14px; margin-top: 12px;
+  font-family: var(--serif); font-style: italic; font-size: 15.5px;
+  color: var(--ink-70); background: rgba(152, 3, 35, .045);
+}
+
+.cta-row { display: flex; align-items: center; gap: 18px; margin-top: 40px; padding-top: 18px; border-top: 2px solid var(--ink); }
+.cta-hint { font-size: 13px; color: var(--ink-45); font-style: italic; font-family: var(--serif); }
+.cta-row .btn-primary { margin-left: auto; }
+
+@media (max-width: 640px) {
+  .summary { grid-template-columns: 1fr; gap: 14px; }
+  .p-del { margin-left: 0; }
+}
+
 /* fade-up entrance */
 @keyframes rise { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
 .rise { animation: rise .45s var(--pop) both; }
@@ -391,6 +478,169 @@ function showView(which) {
     el.classList.toggle('done', which === 'cal' && el.dataset.step === 'mix');
   });
   window.scrollTo(0, 0);
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
+/* ---------- MIX VIEW ---------- */
+var PILLAR_EXAMPLES = [
+  'např. Rozbory kampaní kreslené v sešitě',
+  'např. Návod za 60 vteřin, vždy jedna věc',
+  'např. Za oponou: jak vzniká zakázka',
+  'např. Odpovědi na otázky z komentářů',
+  'např. Případovka: co zafungovalo a proč',
+  'např. Moje nabídka bez okolků'
+];
+
+function renderMix() {
+  const rows = state.pillars.map((p, i) => `
+    <div class="pillar-row rise" data-id="${p.id}" style="animation-delay:${i * 60}ms">
+      <span class="p-dot" style="--c:${p.color}" aria-hidden="true"></span>
+      <div class="p-main">
+        <input class="p-name" type="text" maxlength="60" value="${esc(p.name)}"
+          placeholder="${PILLAR_EXAMPLES[i % PILLAR_EXAMPLES.length]}" aria-label="Název pilíře ${i + 1}">
+        <div class="p-controls">
+          <div class="seg" role="group" aria-label="Role pilíře">
+            ${Object.keys(FUNNEL).map(f => `<button type="button" class="seg-btn${p.funnel === f ? ' on' : ''}" data-funnel="${f}">${FUNNEL[f]}</button>`).join('')}
+          </div>
+          <div class="stepper">
+            <button type="button" class="st-btn" data-act="dec" aria-label="Ubrat kus"
+              ${canDec(state, p.id) ? '' : 'disabled title="Nejdřív odeber kusy z kalendáře"'}>−</button>
+            <span class="st-num num">${p.count}</span>
+            <button type="button" class="st-btn" data-act="inc" aria-label="Přidat kus">+</button>
+          </div>
+          <span class="st-cap">kusů / měsíc</span>
+          <button type="button" class="p-del" aria-label="Smazat pilíř">×</button>
+        </div>
+      </div>
+    </div>`).join('');
+
+  $('#view-mix').innerHTML = `
+    <div class="sheet-col">
+      <section class="rise">
+        <h2 class="lede">Naplánuj si celý měsíc obsahu <em>na jedno posezení</em>.</h2>
+        <p class="intro-sub">Nejdřív si navolíš, co tvoříš a v jakém poměru. Pak to rozložíš do kalendáře
+        a vytiskneš. Zabere to zhruba půl hodiny — a nic se tu neukládá, hotový plán si na konci stáhneš jako PDF.</p>
+      </section>
+
+      <div class="sec-label rise" style="animation-delay:60ms"><span class="n">01</span> Tři role obsahu</div>
+      <section class="roles rise" style="animation-delay:90ms">
+        <div class="role-line"><span class="role-swatch f-dosah" style="background:var(--ink)"></span><b>Dosah</b><span>zastaví lidi, kteří tě ještě neznají</span></div>
+        <div class="role-line"><span class="role-swatch" style="background:rgba(31,29,24,.42)"></span><b>Důvěra</b><span>ukazuje, jak přemýšlíš; lidi se vracejí</span></div>
+        <div class="role-line"><span class="role-swatch" style="background:var(--crimson)"></span><b>Prodej</b><span>říká si o akci: poptávku, e-mail, nákup</span></div>
+      </section>
+
+      <div class="sec-label" style="animation-delay:120ms"><span class="n">02</span> Tvoje pilíře <span class="sec-hint">— ideálně 3–5, každý = téma + podoba</span></div>
+      <section id="pillar-list">${rows}</section>
+      <div class="add-row">
+        <button type="button" class="add-pillar" id="add-pillar" ${state.pillars.length >= MAX_PILLARS ? 'disabled' : ''}>Přidat pilíř</button>
+      </div>
+
+      <div class="sec-label"><span class="n">03</span> Rozložení měsíce</div>
+      <section id="mix-summary"></section>
+
+      <div class="cta-row">
+        <span class="cta-hint" id="cta-hint"></span>
+        <button type="button" class="btn btn-primary" id="go-cal">Pokračovat na kalendář →</button>
+      </div>
+    </div>`;
+  renderSummary();
+}
+
+function renderSummary() {
+  const fb = funnelBreakdown(state);
+  const guards = guardrails(state);
+  const bar = fb.total === 0
+    ? `<div class="fbar" role="img" aria-label="Zatím žádné kusy"></div>`
+    : `<div class="fbar" role="img" aria-label="Rozložení rolí">${fb.rows.filter(r => r.count > 0).map(r =>
+        `<div class="fbar-seg f-${r.funnel}" style="width:${r.pct}%"></div>`).join('')}</div>`;
+  $('#mix-summary').innerHTML = `
+    <div class="summary">
+      <div class="sum-total">
+        <span class="n-big num">${fb.total}</span>
+        <span class="n-cap">kusů měsíčně</span>
+      </div>
+      <div class="fwrap">
+        ${bar}
+        <div class="frows">${fb.rows.map(r =>
+          `<div class="frow"><span class="sw f-${r.funnel}"></span>${FUNNEL[r.funnel]} <span class="num">${r.count}×</span> <span class="pc num">${r.pct} %</span></div>`).join('')}</div>
+      </div>
+    </div>
+    ${guards.map(g => `<div class="guard">${esc(g.message)}</div>`).join('')}`;
+  const named = namedPillars(state).length > 0;
+  const btn = $('#go-cal');
+  if (btn) {
+    btn.disabled = !named;
+    $('#cta-hint').textContent = named ? '' : 'Pojmenuj aspoň jeden pilíř a můžeš dál.';
+  }
+}
+
+function bindMix() {
+  const view = $('#view-mix');
+  view.addEventListener('input', e => {
+    const row = e.target.closest('.pillar-row');
+    if (row && e.target.classList.contains('p-name')) {
+      renamePillar(state, Number(row.dataset.id), e.target.value);
+      renderSummary(); // jemný update — nesahat na DOM s fokusem
+    }
+  });
+  view.addEventListener('click', e => {
+    const row = e.target.closest('.pillar-row');
+    if (row) {
+      const id = Number(row.dataset.id);
+      if (e.target.classList.contains('seg-btn')) {
+        setFunnel(state, id, e.target.dataset.funnel);
+        renderMix(); return;
+      }
+      if (e.target.classList.contains('st-btn')) {
+        if (e.target.dataset.act === 'inc') incCount(state, id); else decCount(state, id);
+        syncCards(state); renderMix(); return;
+      }
+      if (e.target.classList.contains('p-del')) {
+        const placed = state.cards.filter(c => c.pillarId === id && c.date !== null).length;
+        if (placed > 0 && !confirm('Pilíř má ' + placed + ' kusů v kalendáři. Smazat i s nimi?')) return;
+        removePillar(state, id); syncCards(state); renderMix(); return;
+      }
+    }
+    if (e.target.id === 'add-pillar') { addPillar(state); syncCards(state); renderMix(); }
+    if (e.target.id === 'go-cal') { goToCalendar(); }
+  });
+}
+
+function goToCalendar() {
+  if (namedPillars(state).length === 0) return;
+  syncCards(state);
+  renderCal();
+  showView('cal');
+}
+
+/* ---------- INIT ---------- */
+function localTodayIso() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+let renderCal = () => {}; // implementace v kalendářové části níže
+
+const state = createState(localTodayIso());
+addPillar(state); addPillar(state); addPillar(state);
+renderMix();
+bindMix();
+
+/* debug hook: ?debug=w vypíše elementy přetékající viewport do <html data-overflow> */
+if (location.search.includes('debug=w')) {
+  requestAnimationFrame(() => {
+    const bad = [];
+    document.querySelectorAll('body *').forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.right > window.innerWidth + 1 || r.width > window.innerWidth + 1) {
+        bad.push(el.tagName + '.' + String(el.className).split(' ')[0] + '=' + Math.round(r.width) + '@' + Math.round(r.right));
+      }
+    });
+    document.documentElement.setAttribute('data-overflow', 'vw=' + window.innerWidth + ' | ' + (bad.slice(0, 12).join(' | ') || 'CLEAN'));
+  });
 }
 </script>
 </body>
