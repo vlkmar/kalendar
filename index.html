@@ -302,8 +302,24 @@ body.placing .cell:not(.off):hover, .cell.drop-hot { background: rgba(1, 92, 76,
 
 .stateless-note { margin-top: 14px; font-family: var(--serif); font-style: italic; font-size: 13.5px; color: var(--ink-45); }
 
-/* agenda (mobil) — aktivace v T6 */
+/* agenda (mobil) */
 .agenda { display: none; }
+.a-day { border-bottom: var(--hair); }
+.a-day.today { box-shadow: inset 3px 0 0 var(--crimson); }
+.a-head { display: flex; align-items: center; gap: 10px; padding: 11px 6px; cursor: pointer; }
+.a-head:active { background: rgba(31, 29, 24, .04); }
+.a-num { font-size: 13.5px; font-weight: 700; min-width: 26px; }
+.a-day.today .a-num { color: var(--crimson); }
+.a-dow { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .12em; color: var(--ink-45); }
+.a-dow.we { color: var(--crimson); }
+.a-plus { margin-left: auto; color: var(--ink-45); font-size: 15px; padding-right: 4px; }
+.a-chips { display: flex; flex-direction: column; gap: 6px; padding: 0 6px 11px 42px; }
+.a-chips:empty { display: none; }
+
+@media (max-width: 640px) {
+  .grid-wrap { display: none; }
+  .agenda { display: block; border-top: 2px solid var(--ink); }
+}
 
 /* ========== MODAL / SHEET ========== */
 #modal-root:empty { display: none; }
@@ -812,15 +828,18 @@ function renderCal() {
           ${esc(pillarLabel(state, g.pillar))} <span class="tc-count">×${g.count}</span>
         </button>`).join('')}</div>`;
 
-  const agendaHtml = grid.filter(Boolean).map(c => `
+  const agendaHtml = grid.filter(Boolean).map(c => {
+    const dowIdx = (meta.offset + c.day - 1) % 7;
+    return `
     <div class="a-day${c.iso === today ? ' today' : ''}" data-iso="${c.iso}">
       <div class="a-head" role="button" tabindex="0" aria-label="${c.day}. den — přidat kus">
         <span class="a-num num">${String(c.day).padStart(2, '0')}</span>
-        <span class="a-dow">${['PO', 'ÚT', 'ST', 'ČT', 'PÁ', 'SO', 'NE'][(meta.offset + c.day - 1) % 7]}</span>
-        <span class="a-plus num">+</span>
+        <span class="a-dow${dowIdx >= 5 ? ' we' : ''}">${['PO', 'ÚT', 'ST', 'ČT', 'PÁ', 'SO', 'NE'][dowIdx]}</span>
+        <span class="a-plus num" aria-hidden="true">+</span>
       </div>
       <div class="a-chips">${placedForDate(state, c.iso).map(chipHtml).join('')}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   $('#view-cal').innerHTML = `
     <div class="cal-toolbar">
