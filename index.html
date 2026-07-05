@@ -267,7 +267,11 @@ main[hidden] { display: none; }
 .cell.today { box-shadow: inset 0 0 0 1.5px var(--crimson); }
 .cell.today .cell-day { color: var(--crimson); font-weight: 700; }
 body.placing .cell:not(.off) { cursor: copy; }
-body.placing .cell:not(.off):hover, .cell.drop-hot { background: rgba(1, 92, 76, .07); box-shadow: inset 0 0 0 1.5px #015C4C; }
+body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background: rgba(1, 92, 76, .07); box-shadow: inset 0 0 0 1.5px #015C4C; }
+@media (pointer: fine) {
+  .tcard[draggable="true"], .chip[draggable="true"] { cursor: grab; }
+  .tcard[draggable="true"]:active, .chip[draggable="true"]:active { cursor: grabbing; }
+}
 .cell:not(.off):hover .cell-add { opacity: 1; }
 .cell-add {
   opacity: 0; position: absolute; left: 6px; bottom: 3px;
@@ -869,6 +873,13 @@ function renderCal() {
     <p class="stateless-note">Plán se po zavření stránky neuloží. Hotový kalendář si exportuj do PDF.</p>`;
 
   document.body.classList.toggle('placing', !!pendingCard);
+  applyDraggable();
+}
+
+const FINE_POINTER = matchMedia('(pointer: fine)').matches;
+function applyDraggable() {
+  if (!FINE_POINTER) return;
+  $$('#view-cal .tcard[data-pick], #view-cal .chip').forEach(el => { el.draggable = true; });
 }
 
 function pick(cardId) { pendingCardId = cardId; renderCal(); }
@@ -997,6 +1008,32 @@ function bindCal() {
     if (e.key !== 'Escape') return;
     if ($('#modal-root').innerHTML !== '') { closeModal(); renderCal(); }
     else if (pendingCardId) cancelPick();
+  });
+
+  /* drag & drop — desktop enhancement */
+  const view = $('#view-cal');
+  view.addEventListener('dragstart', e => {
+    const t = e.target.closest('[data-pick], .chip');
+    if (!t) return;
+    e.dataTransfer.setData('text/plain', t.dataset.pick || t.dataset.card);
+    e.dataTransfer.effectAllowed = 'copyMove';
+  });
+  view.addEventListener('dragover', e => {
+    const cell = e.target.closest('.cell:not(.off), .a-day');
+    if (!cell) return;
+    e.preventDefault();
+    cell.classList.add('drop-hot');
+  });
+  view.addEventListener('dragleave', e => {
+    const cell = e.target.closest('.cell, .a-day');
+    if (cell) cell.classList.remove('drop-hot');
+  });
+  view.addEventListener('drop', e => {
+    const cell = e.target.closest('.cell:not(.off), .a-day');
+    if (!cell) return;
+    e.preventDefault();
+    const id = Number(e.dataTransfer.getData('text/plain'));
+    if (id) { pendingCardId = null; placeCard(state, id, cell.dataset.iso); renderCal(); }
   });
 }
 
