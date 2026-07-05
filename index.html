@@ -8,9 +8,162 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-<style>/* CSS v Tasku 3 */</style>
+<style>
+/* ========== TOKENS ========== */
+:root {
+  color-scheme: light;
+  --paper: #F4F3EA;
+  --paper-deep: #ECEADC;
+  --ink: #1F1D18;
+  --ink-70: rgba(31, 29, 24, .70);
+  --ink-45: rgba(31, 29, 24, .45);
+  --ink-14: rgba(31, 29, 24, .14);
+  --crimson: #980323;
+  --crimson-deep: #75021A;
+  --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --hair: 1px solid var(--ink-14);
+  --pop: cubic-bezier(.2, .9, .3, 1.2);
+}
+
+/* ========== BASE ========== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
+  min-height: 100vh;
+  position: relative;
+}
+/* zrno papíru */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 2000;
+  opacity: .5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.12 0 0 0 0 0.11 0 0 0 0 0.09 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+::selection { background: var(--crimson); color: var(--paper); }
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: none; }
+:focus-visible { outline: 2px solid var(--crimson); outline-offset: 2px; border-radius: 2px; }
+
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.12; }
+em { font-style: italic; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* ========== MASTHEAD ========== */
+.masthead {
+  display: flex; align-items: center; gap: 16px;
+  max-width: 1240px; margin: 0 auto;
+  padding: 18px 24px 14px;
+  border-bottom: 2px solid var(--ink);
+}
+.monogram {
+  width: 44px; height: 44px; flex: none;
+  background: var(--crimson);
+  color: var(--paper);
+  font-family: var(--serif); font-size: 21px; letter-spacing: .5px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 2px 2px 0 rgba(31, 29, 24, .18);
+}
+.masthead-title h1 { font-size: 27px; }
+.masthead-title h1 em { color: var(--crimson); }
+.masthead-title .tagline {
+  font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-45); margin-top: 1px;
+}
+.steps {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em;
+  color: var(--ink-45);
+  white-space: nowrap;
+}
+.steps .rule { width: 26px; border-top: var(--hair); }
+.steps .step { display: flex; gap: 7px; align-items: baseline; text-transform: uppercase; }
+.steps .step b { font-weight: 700; }
+.steps .step.on { color: var(--crimson); }
+.steps .step.done { color: var(--ink-70); }
+
+/* ========== LAYOUT ========== */
+main { max-width: 1240px; margin: 0 auto; padding: 26px 24px 90px; }
+main[hidden] { display: none; }
+.sheet-col { max-width: 860px; margin: 0 auto; }
+
+/* editorial section label: 01 — PILÍŘE */
+.sec-label {
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--ink-70);
+  margin: 34px 0 14px;
+}
+.sec-label::after { content: ''; flex: 1; border-top: var(--hair); }
+.sec-label .n { color: var(--crimson); }
+
+/* ========== BUTTONS ========== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-weight: 700; font-size: 14.5px; letter-spacing: .01em;
+  padding: 11px 22px;
+  border-radius: 3px;
+  transition: transform .15s var(--pop), box-shadow .15s, background .15s, color .15s, border-color .15s;
+}
+.btn-primary {
+  background: var(--crimson); color: var(--paper);
+  box-shadow: 2.5px 2.5px 0 rgba(31, 29, 24, .22);
+}
+.btn-primary:hover { background: var(--crimson-deep); transform: translate(-1px, -1px); box-shadow: 3.5px 3.5px 0 rgba(31, 29, 24, .22); }
+.btn-primary:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 rgba(31, 29, 24, .22); }
+.btn-primary:disabled { background: var(--ink-45); box-shadow: none; transform: none; cursor: not-allowed; }
+.btn-ghost {
+  border: 1px solid var(--ink-14); color: var(--ink-70); background: transparent;
+}
+.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+.btn-sm { padding: 7px 13px; font-size: 12.5px; }
+
+#print-sheet { display: none; }
+
+/* fade-up entrance */
+@keyframes rise { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
+.rise { animation: rise .45s var(--pop) both; }
+
+@media (max-width: 640px) {
+  .masthead { padding: 14px 16px 11px; gap: 12px; }
+  .masthead-title h1 { font-size: 21px; }
+  .masthead-title .tagline { display: none; }
+  .steps .lbl { display: none; }
+  main { padding: 18px 14px 70px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
 </head>
 <body>
+<header class="masthead">
+  <div class="monogram" aria-hidden="true">VM</div>
+  <div class="masthead-title">
+    <h1>Obsahový <em>kalendář</em></h1>
+    <p class="tagline">Naplánuj si měsíc obsahu na jedno posezení</p>
+  </div>
+  <nav class="steps" aria-label="Kroky">
+    <span class="step on" data-step="mix"><b>01</b> <span class="lbl">Mix</span></span>
+    <span class="rule" aria-hidden="true"></span>
+    <span class="step" data-step="cal"><b>02</b> <span class="lbl">Kalendář</span></span>
+  </nav>
+</header>
+
+<main id="view-mix"></main>
+<main id="view-cal" hidden></main>
+<div id="modal-root"></div>
+<section id="print-sheet" aria-hidden="true"></section>
+
 <script>
 /* LOGIC-START */
 'use strict';
@@ -225,7 +378,20 @@ function isDirty(state) {
     || state.cards.some(c => c.idea.trim().length > 0);
 }
 /* LOGIC-END */
-/* UI v Tasku 4+ */
+
+/* ========== UI ========== */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+function showView(which) {
+  $('#view-mix').hidden = which !== 'mix';
+  $('#view-cal').hidden = which !== 'cal';
+  $$('.steps .step').forEach(el => {
+    el.classList.toggle('on', el.dataset.step === which);
+    el.classList.toggle('done', which === 'cal' && el.dataset.step === 'mix');
+  });
+  window.scrollTo(0, 0);
+}
 </script>
 </body>
 </html>
