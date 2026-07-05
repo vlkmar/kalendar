@@ -6,6 +6,7 @@ const html = readFileSync(new URL('./index.html', import.meta.url), 'utf8');
 const logic = html.match(/\/\* LOGIC-START \*\/([\s\S]*?)\/\* LOGIC-END \*\//)?.[1];
 assert.ok(logic, 'logic blok nalezen');
 const ctx = {}; vm.createContext(ctx); vm.runInContext(logic, ctx);
+const plain = (o) => JSON.parse(JSON.stringify(o));
 const T = (name, fn) => { try { fn(); console.log('ok –', name); } catch (e) { console.error('FAIL –', name); throw e; } };
 
 T('defaultViewMonth = příští měsíc, přelom roku', () => {
@@ -75,8 +76,8 @@ T('monthGrid: offset nullů + ISO klíče', () => {
   const g = ctx.monthGrid('2026-08');
   assert.equal(g.length, 5 + 31);
   assert.equal(g[0], null); assert.equal(g[4], null);
-  assert.deepEqual(g[5], { iso: '2026-08-01', day: 1 });
-  assert.deepEqual(g[35], { iso: '2026-08-31', day: 31 });
+  assert.deepEqual(plain(g[5]), { iso: '2026-08-01', day: 1 });
+  assert.deepEqual(plain(g[35]), { iso: '2026-08-31', day: 31 });
 });
 T('addMonths přes přelom roku oběma směry', () => {
   assert.equal(ctx.addMonths('2026-12', 1), '2027-01');
@@ -118,9 +119,9 @@ T('place/unplace/progress/isDirty', () => {
   assert.equal(ctx.isDirty(s), true);
   const card = ctx.trayCards(s)[0];
   ctx.placeCard(s, card.id, '2026-08-03');
-  assert.deepEqual(ctx.progress(s), { placed: 1, total: 4 });
+  assert.deepEqual(plain(ctx.progress(s)), { placed: 1, total: 4 });
   assert.equal(ctx.placedForDate(s, '2026-08-03').length, 1);
   ctx.unplaceCard(s, card.id);
-  assert.deepEqual(ctx.progress(s), { placed: 0, total: 4 });
+  assert.deepEqual(plain(ctx.progress(s)), { placed: 0, total: 4 });
 });
 console.log('TASK2 OK');
