@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obsahový kalendář — naplánuj si měsíc obsahu | Marian Vlk</title>
+<meta name="description" content="Zdarma nástroj: navol si pilíře obsahu, rozvrhni měsíc a vytiskni si plán. Bez registrace, bez ukládání.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>/* CSS v Tasku 3 */</style>
+</head>
+<body>
+<script>
+/* LOGIC-START */
+'use strict';
+
+var PILLAR_COLORS = ['#02628C', '#015C4C', '#3F5C01', '#6413FC', '#015C1E', '#4F5151'];
+var FUNNEL = { dosah: 'Dosah', duvera: 'Důvěra', prodej: 'Prodej' };
+var FORMATS = { video: 'Video', carousel: 'Carousel', text: 'Textový příspěvek' };
+var MAX_PILLARS = 6;
+var DEFAULT_COUNT = 4;
+
+function defaultViewMonth(todayIso) {
+  const [y, m] = todayIso.split('-').map(Number);
+  const ny = m === 12 ? y + 1 : y;
+  const nm = m === 12 ? 1 : m + 1;
+  return ny + '-' + String(nm).padStart(2, '0');
+}
+
+function createState(todayIso) {
+  return { pillars: [], cards: [], viewMonth: defaultViewMonth(todayIso), _seq: 0 };
+}
+
+function addPillar(state) {
+  if (state.pillars.length >= MAX_PILLARS) return null;
+  const used = new Set(state.pillars.map(p => p.color));
+  const color = PILLAR_COLORS.find(c => !used.has(c));
+  const pillar = { id: ++state._seq, name: '', funnel: 'dosah', count: DEFAULT_COUNT, color };
+  state.pillars.push(pillar);
+  return pillar;
+}
+
+function getPillar(state, id) {
+  return state.pillars.find(p => p.id === id) || null;
+}
+
+function renamePillar(state, id, name) {
+  const p = getPillar(state, id);
+  if (p) p.name = name;
+}
+
+function setFunnel(state, id, funnel) {
+  const p = getPillar(state, id);
+  if (p && FUNNEL[funnel]) p.funnel = funnel;
+}
+
+function placedCount(state, pillarId) {
+  return state.cards.filter(c => c.pillarId === pillarId && c.date !== null).length;
+}
+
+function canDec(state, id) {
+  const p = getPillar(state, id);
+  if (!p) return false;
+  return p.count > Math.max(1, placedCount(state, id));
+}
+
+function incCount(state, id) {
+  const p = getPillar(state, id);
+  if (p) p.count += 1;
+}
+
+function decCount(state, id) {
+  if (!canDec(state, id)) return false;
+  getPillar(state, id).count -= 1;
+  return true;
+}
+
+function removePillar(state, id) {
+  const removedPlaced = placedCount(state, id);
+  state.pillars = state.pillars.filter(p => p.id !== id);
+  state.cards = state.cards.filter(c => c.pillarId !== id);
+  return { removedPlaced };
+}
+
+function syncCards(state) {
+  for (const p of state.pillars) {
+    const mine = state.cards.filter(c => c.pillarId === p.id);
+    let diff = p.count - mine.length;
+    while (diff > 0) {
+      state.cards.push({ id: ++state._seq, pillarId: p.id, idea: '', format: null, date: null });
+      diff -= 1;
+    }
+    if (diff < 0) {
+      const removable = mine.filter(c => c.date === null).slice(diff); // posledních |diff| neumístěných
+      const ids = new Set(removable.map(c => c.id));
+      state.cards = state.cards.filter(c => !ids.has(c.id));
+    }
+  }
+}
+
+function namedPillars(state) {
+  return state.pillars.filter(p => p.name.trim().length > 0);
+}
+/* LOGIC-END */
+/* UI v Tasku 4+ */
+</script>
+</body>
+</html>
