@@ -390,6 +390,59 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+
+/* ========== PRINT SHEET ========== */
+#print-sheet { font-family: var(--sans); color: #171512; }
+.pg-head { display: flex; align-items: center; gap: 5mm; padding-bottom: 3mm; border-bottom: .7mm solid #171512; }
+.pg-mono {
+  width: 12mm; height: 12mm; flex: none;
+  background: var(--crimson); color: #fff;
+  font-family: var(--serif); font-size: 6mm;
+  display: flex; align-items: center; justify-content: center;
+}
+.pg-title { font-family: var(--serif); font-size: 7.2mm; line-height: 1.05; }
+.pg-title em { color: var(--crimson); }
+.pg-month { font-family: var(--mono); font-size: 3.4mm; letter-spacing: .14em; text-transform: uppercase; margin-top: 1mm; color: #4a463f; }
+.pg-total { margin-left: auto; text-align: right; font-family: var(--mono); font-size: 3.2mm; color: #4a463f; }
+.pg-total b { font-size: 5.6mm; color: #171512; display: block; }
+
+.pg-legend { display: flex; flex-wrap: wrap; gap: 2mm 7mm; padding: 2.5mm 0; align-items: baseline; }
+.pg-leg { display: flex; align-items: baseline; gap: 2mm; font-size: 3.1mm; }
+.pg-leg .sq { width: 2.6mm; height: 2.6mm; flex: none; transform: translateY(.2mm); }
+.pg-leg b { font-weight: 700; }
+.pg-leg .meta { font-family: var(--mono); font-size: 2.7mm; color: #4a463f; }
+
+.pg-week { display: grid; grid-template-columns: repeat(7, 1fr); }
+.pg-week span { font-family: var(--mono); font-size: 2.6mm; font-weight: 700; letter-spacing: .12em; text-align: right; padding: 0 1.5mm .8mm; color: #4a463f; }
+.pg-week span.we { color: var(--crimson); }
+.pg-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: 1fr;
+  border-top: .35mm solid #b9b4a8; border-left: .35mm solid #b9b4a8;
+  height: 148mm;
+}
+.pg-cell { border-right: .35mm solid #b9b4a8; border-bottom: .35mm solid #b9b4a8; position: relative; padding: 1.2mm 1.2mm 4mm; display: flex; flex-direction: column; gap: 1mm; overflow: hidden; }
+.pg-cell.off { background: repeating-linear-gradient(-45deg, transparent 0 1.8mm, rgba(23, 21, 18, .05) 1.8mm 2.1mm); }
+.pg-cell .d { position: absolute; right: 1.4mm; bottom: .7mm; font-family: var(--mono); font-size: 2.5mm; color: #8d8778; }
+.pg-cell.today .d { color: var(--crimson); font-weight: 700; }
+.pg-chip { border: .3mm solid #c8c3b6; border-left: 1.1mm solid var(--c); padding: .9mm 1.2mm 1mm; background: #fff; }
+.pg-chip .pc-p { display: block; font-family: var(--mono); font-size: 2.15mm; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #4a463f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pg-chip .pc-i { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-size: 2.8mm; line-height: 1.3; font-weight: 500; }
+/* dvě a víc karet v jednom dni → zhustit, ať se nepřekrývají */
+.pg-cell:has(.pg-chip + .pg-chip) .pc-i { -webkit-line-clamp: 1; }
+.pg-cell:has(.pg-chip + .pg-chip) .pc-f { display: none; }
+.pg-chip .pc-line { display: block; height: 3.4mm; border-bottom: .3mm solid #a49e90; }
+.pg-chip .pc-f { display: inline-block; margin-top: .6mm; font-family: var(--mono); font-size: 2mm; letter-spacing: .06em; text-transform: uppercase; border: .25mm solid #c8c3b6; padding: 0 1mm; color: #4a463f; }
+.pg-foot { display: flex; align-items: baseline; gap: 3mm; padding-top: 2mm; margin-top: 2mm; border-top: .35mm solid #171512; font-family: var(--mono); font-size: 2.8mm; color: #4a463f; }
+.pg-foot .fr { margin-left: auto; font-family: var(--serif); font-style: italic; }
+
+@media print {
+  @page { size: A4 landscape; margin: 8mm; }
+  html, body { background: #fff !important; }
+  body::before { display: none !important; } /* zrno pryč — šetří inkoust */
+  body > *:not(#print-sheet) { display: none !important; }
+  #print-sheet { display: block !important; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+}
 </style>
 </head>
 <body>
@@ -1037,7 +1090,59 @@ function bindCal() {
   });
 }
 
-function doPrint() { window.print(); } /* plný print sheet v T8 */
+function renderPrintSheet() {
+  const meta = monthMeta(state.viewMonth);
+  const grid = monthGrid(state.viewMonth);
+  const pad = (7 - (grid.length % 7)) % 7;
+  const today = localTodayIso();
+  const fb = funnelBreakdown(state);
+  const named = namedPillars(state);
+
+  const chipHtml = c => {
+    const p = getPillar(state, c.pillarId);
+    const idea = c.idea.trim();
+    return `<span class="pg-chip" style="--c:${p.color}">
+      <span class="pc-p">${esc(pillarLabel(state, p))}</span>
+      ${idea ? `<span class="pc-i">${esc(idea)}</span>` : '<span class="pc-line"></span>'}
+      ${c.format ? `<span class="pc-f">${FORMATS[c.format]}</span>` : ''}
+    </span>`;
+  };
+  const cellHtml = c => {
+    if (!c) return '<div class="pg-cell off"></div>';
+    return `<div class="pg-cell${c.iso === today ? ' today' : ''}">
+      ${placedForDate(state, c.iso).map(chipHtml).join('')}<span class="d">${c.day}</span>
+    </div>`;
+  };
+
+  $('#print-sheet').innerHTML = `
+    <div class="pg-head">
+      <span class="pg-mono">VM</span>
+      <div>
+        <div class="pg-title">Obsahový <em>kalendář</em></div>
+        <div class="pg-month">${meta.label}</div>
+      </div>
+      <div class="pg-total"><b>${fb.total}</b>kusů obsahu</div>
+    </div>
+    <div class="pg-legend">
+      ${named.map(p => `<span class="pg-leg"><span class="sq" style="background:${p.color}"></span>
+        <b>${esc(p.name.trim())}</b>
+        <span class="meta">${p.count}× · ${FUNNEL[p.funnel]} · ${fb.total ? Math.round(p.count * 100 / fb.total) : 0} %</span></span>`).join('')}
+    </div>
+    <div class="pg-week">${['PO', 'ÚT', 'ST', 'ČT', 'PÁ'].map(d => `<span>${d}</span>`).join('')}<span class="we">SO</span><span class="we">NE</span></div>
+    <div class="pg-grid">${grid.map(cellHtml).join('')}${'<div class="pg-cell off"></div>'.repeat(pad)}</div>
+    <div class="pg-foot">
+      <span>Marian Vlk · vlkmar.cz</span>
+      <span class="fr">Vytištěno z nástroje Obsahový kalendář — kalendar.vlkmar.cz</span>
+    </div>`;
+}
+
+function doPrint() {
+  const left = trayCards(state).length;
+  if (left > 0 && !confirm('V zásobníku ti zbývá ' + left + ' kusů. Vytisknout kalendář i tak?')) return;
+  renderPrintSheet();
+  window.print();
+}
+window.addEventListener('beforeprint', renderPrintSheet);
 
 /* ---------- INIT ---------- */
 function localTodayIso() {
@@ -1050,6 +1155,32 @@ addPillar(state); addPillar(state); addPillar(state);
 renderMix();
 bindMix();
 bindCal();
+
+/* e2e hook: ?e2e=print — demo stav pro vizuální kontrolu tisku */
+if (location.search.includes('e2e=print')) {
+  const [a, b, c] = state.pillars;
+  renamePillar(state, a.id, 'Rozbory kampaní v sešitě');
+  renamePillar(state, b.id, 'Návody za 60 vteřin'); setFunnel(state, b.id, 'duvera'); incCount(state, b.id);
+  renamePillar(state, c.id, 'Moje nabídka'); setFunnel(state, c.id, 'prodej');
+  while (canDec(state, c.id)) decCount(state, c.id);
+  syncCards(state);
+  const ym = state.viewMonth;
+  const t = trayCards(state); // a×4 (0–3), b×5 (4–8), c×1 (9)
+  const put = (i, day, idea, fmt) => {
+    placeCard(state, t[i].id, ym + '-' + String(day).padStart(2, '0'));
+    if (idea) setIdea(state, t[i].id, idea);
+    if (fmt) setFormat(state, t[i].id, fmt);
+  };
+  put(0, 3, '3 chyby, které vidím v každé druhé kampani', 'video');
+  put(1, 5, 'Rozbor: kampaň, která prodala dům', 'video');
+  put(4, 10, '', null);
+  put(5, 12, 'Proč odfláknutý brief zabije i dobrý produkt (řěžůč test)', 'carousel');
+  put(6, 12, 'První věta, která zastaví palec', 'video');
+  put(9, 17, 'Jak vypadá spolupráce se mnou', 'text');
+  put(2, 24, 'Sešit: anatomie letáku, který funguje', null);
+  goToCalendar();
+  renderPrintSheet();
+}
 
 /* e2e hook: ?e2e=1 — place → přepnutí měsíce tam a zpět → assert persistence */
 if (location.search.includes('e2e=1')) {
