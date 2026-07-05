@@ -38,7 +38,7 @@ T('syncCards: generuje podle count, snížení bere nejdřív neumístěné', ()
 });
 T('decCount blokuje pod počet umístěných i pod 1', () => {
   const s = ctx.createState('2026-07-05');
-  const p = ctx.addPillar(s); ctx.syncCards(s);
+  const p = ctx.addPillar(s); ctx.renamePillar(s, p.id, 'Plný'); ctx.syncCards(s);
   s.cards[0].date = '2026-08-03'; s.cards[1].date = '2026-08-04'; s.cards[2].date = '2026-08-05';
   assert.equal(ctx.decCount(s, p.id), true);  ctx.syncCards(s); // 4→3 ok
   assert.equal(ctx.canDec(s, p.id), false);
@@ -49,7 +49,7 @@ T('decCount blokuje pod počet umístěných i pod 1', () => {
 });
 T('removePillar odstraní karty a vrací počet umístěných', () => {
   const s = ctx.createState('2026-07-05');
-  const p = ctx.addPillar(s); ctx.syncCards(s);
+  const p = ctx.addPillar(s); ctx.renamePillar(s, p.id, 'Mazací'); ctx.syncCards(s);
   s.cards[0].date = '2026-08-03';
   const r = ctx.removePillar(s, p.id);
   assert.equal(r.removedPlaced, 1);
@@ -86,6 +86,7 @@ T('addMonths přes přelom roku oběma směry', () => {
 T('funnelBreakdown: largest remainder, součet 100', () => {
   const s = ctx.createState('2026-07-05');
   const a = ctx.addPillar(s), b = ctx.addPillar(s), c = ctx.addPillar(s);
+  ctx.renamePillar(s, a.id, 'A'); ctx.renamePillar(s, b.id, 'B'); ctx.renamePillar(s, c.id, 'C');
   [a, b, c].forEach(p => { while (p.count > 1) { ctx.decCount(s, p.id); } });
   ctx.setFunnel(s, b.id, 'duvera'); ctx.setFunnel(s, c.id, 'prodej'); ctx.syncCards(s);
   const fb = ctx.funnelBreakdown(s);
@@ -110,12 +111,14 @@ T('guardrails: prodej-high přes 15 %, pillar-low, over-days', () => {
   ctx.syncCards(s);
   assert.ok(ctx.guardrails(s).map(g => g.id).includes('over-days'));
 });
-T('place/unplace/progress/isDirty', () => {
+T('place/unplace/progress/isDirty + unnamed negeneruje karty', () => {
   const s = ctx.createState('2026-07-05');
   assert.equal(ctx.isDirty(s), false);
   const p = ctx.addPillar(s); ctx.syncCards(s);
+  assert.equal(s.cards.length, 0, 'nepojmenovaný pilíř negeneruje karty');
   assert.equal(ctx.isDirty(s), false, 'nepojmenovaný pilíř bez umístění není dirty');
-  ctx.renamePillar(s, p.id, 'Série');
+  ctx.renamePillar(s, p.id, 'Série'); ctx.syncCards(s);
+  assert.equal(s.cards.length, 4, 'pojmenování aktivuje karty');
   assert.equal(ctx.isDirty(s), true);
   const card = ctx.trayCards(s)[0];
   ctx.placeCard(s, card.id, '2026-08-03');
