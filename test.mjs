@@ -95,21 +95,32 @@ T('funnelBreakdown: largest remainder, součet 100', () => {
   assert.equal(pcts.reduce((x, y) => x + y, 0), 100);
   assert.deepEqual([...pcts].sort((x, y) => y - x), [34, 33, 33]);
 });
-T('guardrails: prodej-high přes 15 %, pillar-low, over-days', () => {
+T('repurpose: toggle tam a zpět, jen platné klíče', () => {
   const s = ctx.createState('2026-07-05');
-  const a = ctx.addPillar(s); ctx.renamePillar(s, a.id, 'Návody');
-  const b = ctx.addPillar(s); ctx.renamePillar(s, b.id, 'Nabídka'); ctx.setFunnel(s, b.id, 'prodej');
-  ctx.decCount(s, b.id); ctx.decCount(s, b.id); ctx.decCount(s, b.id);
-  ctx.syncCards(s);
-  const ids = ctx.guardrails(s).map(g => g.id);
-  assert.ok(ids.includes('prodej-high'));
-  assert.ok(ids.includes('pillar-low'), 'Nabídka má 1 kus');
-  assert.ok(!ids.includes('over-days'));
-  const low = ctx.guardrails(s).find(g => g.id === 'pillar-low');
-  assert.ok(low.message.includes('Nabídka') && !low.message.includes('Návody'));
-  for (let i = 0; i < 30; i++) ctx.incCount(s, a.id);
-  ctx.syncCards(s);
-  assert.ok(ctx.guardrails(s).map(g => g.id).includes('over-days'));
+  const p = ctx.addPillar(s); ctx.renamePillar(s, p.id, 'Témata'); ctx.syncCards(s);
+  const c = ctx.trayCards(s)[0];
+  assert.deepEqual(plain(c.repurpose), []);
+  ctx.toggleRepurpose(s, c.id, 'carousel'); ctx.toggleRepurpose(s, c.id, 'newsletter');
+  assert.deepEqual(plain(c.repurpose), ['carousel', 'newsletter']);
+  ctx.toggleRepurpose(s, c.id, 'carousel');
+  assert.deepEqual(plain(c.repurpose), ['newsletter']);
+  ctx.toggleRepurpose(s, c.id, 'blbost');
+  assert.deepEqual(plain(c.repurpose), ['newsletter']);
+});
+T('setPillarColor: jen barvy z palety', () => {
+  const s = ctx.createState('2026-07-05');
+  const p = ctx.addPillar(s);
+  ctx.setPillarColor(s, p.id, ctx.PILLAR_COLORS[3]);
+  assert.equal(p.color, ctx.PILLAR_COLORS[3]);
+  ctx.setPillarColor(s, p.id, '#ff0000');
+  assert.equal(p.color, ctx.PILLAR_COLORS[3], 'mimo paletu se ignoruje');
+});
+T('cardsForPillar: seřazené dle id', () => {
+  const s = ctx.createState('2026-07-05');
+  const p = ctx.addPillar(s); ctx.renamePillar(s, p.id, 'Řazení'); ctx.syncCards(s);
+  const ids = ctx.cardsForPillar(s, p.id).map(c => c.id);
+  assert.deepEqual(plain(ids), [...ids].sort((a, b) => a - b));
+  assert.equal(ids.length, 4);
 });
 T('place/unplace/progress/isDirty + unnamed negeneruje karty', () => {
   const s = ctx.createState('2026-07-05');

@@ -477,6 +477,7 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
 var PILLAR_COLORS = ['#02628C', '#015C4C', '#3F5C01', '#6413FC', '#015C1E', '#4F5151'];
 var FUNNEL = { dosah: 'Dosah', duvera: 'Důvěra', prodej: 'Prodej' };
 var FORMATS = { video: 'Video', carousel: 'Carousel', text: 'Textový příspěvek' };
+var REPURPOSE = { carousel: 'Carousel', text: 'Text', newsletter: 'Newsletter' };
 var MAX_PILLARS = 6;
 var DEFAULT_COUNT = 4;
 
@@ -550,7 +551,7 @@ function syncCards(state) {
     const mine = state.cards.filter(c => c.pillarId === p.id);
     let diff = p.count - mine.length;
     while (diff > 0) {
-      state.cards.push({ id: ++state._seq, pillarId: p.id, idea: '', format: null, date: null });
+      state.cards.push({ id: ++state._seq, pillarId: p.id, idea: '', format: null, repurpose: [], date: null });
       diff -= 1;
     }
     if (diff < 0) {
@@ -615,33 +616,6 @@ function funnelBreakdown(state) {
   return { total, rows: rows.map(({ funnel, count, pct }) => ({ funnel, count, pct })) };
 }
 
-function guardrails(state) {
-  const out = [];
-  const fb = funnelBreakdown(state);
-  const prodej = fb.rows.find(r => r.funnel === 'prodej');
-  if (fb.total > 0 && prodej.count / fb.total > 0.15) {
-    out.push({
-      id: 'prodej-high',
-      message: 'Prodej máš přes 15 %. Osvědčený poměr: na zhruba deset kusů, kde jen dáváš, patří jeden, kde si o něco říkáš.'
-    });
-  }
-  const low = namedPillars(state).filter(p => p.count < 4);
-  if (low.length > 0) {
-    out.push({
-      id: 'pillar-low',
-      message: low.map(p => pillarLabel(state, p)).join(', ') + ': méně než 4 kusy za měsíc. Z tak malého vzorku nepoznáš, jestli pilíř funguje.'
-    });
-  }
-  const days = monthMeta(state.viewMonth).days;
-  if (fb.total > days) {
-    out.push({
-      id: 'over-days',
-      message: 'Máš naplánováno víc kusů (' + fb.total + ') než má měsíc dní (' + days + '). Nech si rezervu, nebo něco uber.'
-    });
-  }
-  return out;
-}
-
 function getCard(state, id) {
   return state.cards.find(c => c.id === id) || null;
 }
@@ -664,6 +638,22 @@ function setIdea(state, cardId, text) {
 function setFormat(state, cardId, f) {
   const c = getCard(state, cardId);
   if (c) c.format = (f === null || FORMATS[f]) ? f : c.format;
+}
+
+function toggleRepurpose(state, cardId, key) {
+  const c = getCard(state, cardId);
+  if (!c || !REPURPOSE[key]) return;
+  const i = c.repurpose.indexOf(key);
+  if (i === -1) c.repurpose.push(key); else c.repurpose.splice(i, 1);
+}
+
+function setPillarColor(state, id, color) {
+  const p = getPillar(state, id);
+  if (p && PILLAR_COLORS.includes(color)) p.color = color;
+}
+
+function cardsForPillar(state, pillarId) {
+  return state.cards.filter(c => c.pillarId === pillarId).sort((a, b) => a.id - b.id);
 }
 
 function trayCards(state) {
