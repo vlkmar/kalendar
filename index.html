@@ -10,10 +10,10 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kalendar.vlkmar.cz/">
 <meta property="og:locale" content="cs_CZ">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23980323'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='26' fill='%23F4F3EA' text-anchor='middle'%3EVM%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23F4F3EA'/%3E%3Cg transform='translate(3,17) scale(0.276)'%3E%3Cpath d='M6 54 Q15 66 24 53 Q33 39 42 53 Q50 65 58 51 L70 14 Q73 7 76 15 L86 78 Q89 88 93 78 L102 10 Q105 3 108 13 L116 62 Q120 74 126 60 Q132 46 140 54 Q148 62 156 48 Q164 36 174 50 Q182 62 192 50 Q198 43 204 50' stroke='%23015C4C' stroke-width='24' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ========== TOKENS ========== */
 :root {
@@ -70,14 +70,8 @@ em { font-style: italic; }
   padding: 18px 24px 14px;
   border-bottom: 2px solid var(--ink);
 }
-.monogram {
-  width: 44px; height: 44px; flex: none;
-  background: var(--crimson);
-  color: var(--paper);
-  font-family: var(--serif); font-size: 21px; letter-spacing: .5px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 2px 2px 0 rgba(31, 29, 24, .18);
-}
+.logo-mark { flex: none; display: flex; align-items: center; }
+.logo-mark svg { height: 36px; width: auto; display: block; }
 .masthead-title h1 { font-size: 27px; }
 .masthead-title h1 em { color: var(--crimson); }
 .masthead-title .tagline {
@@ -140,28 +134,57 @@ main[hidden] { display: none; }
 .lede em { color: var(--crimson); }
 .intro-sub { max-width: 560px; color: var(--ink-70); font-size: 15px; margin-top: 10px; }
 
-.roles { border: var(--hair); border-left: 3px solid var(--ink); padding: 4px 0; background: rgba(255, 255, 255, .35); }
-.role-line { display: flex; align-items: baseline; gap: 12px; padding: 9px 16px; }
+.funnel-block { display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, 330px); gap: 26px 44px; align-items: center; margin-top: 34px; padding: 20px 0 8px; border-top: var(--hair); }
+.funnel-block h3 { font-size: 25px; margin-bottom: 14px; }
+.funnel-block h3 em { color: var(--crimson); }
+.role-line { display: flex; align-items: baseline; gap: 12px; padding: 8px 0; }
 .role-line + .role-line { border-top: var(--hair); }
 .role-swatch { width: 11px; height: 11px; flex: none; transform: translateY(1px); }
 .role-line b { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; min-width: 74px; }
 .role-line span { color: var(--ink-70); font-size: 14.5px; }
+.sketch { width: 100%; height: auto; display: block; }
+.sketch text { font-family: 'Caveat', 'Bradley Hand', cursive; font-size: 31px; font-weight: 600; }
 
-.sec-hint { font-weight: 400; letter-spacing: .06em; color: var(--ink-45); text-transform: none; }
-
-.pillar-row { display: flex; gap: 14px; padding: 18px 2px 16px; border-bottom: var(--hair); }
+.pillar-row { display: flex; gap: 14px; padding: 20px 2px 18px; border-bottom: var(--hair); }
 .p-dot { width: 13px; height: 13px; flex: none; margin-top: 13px; background: var(--c); box-shadow: 1.5px 1.5px 0 rgba(31, 29, 24, .2); }
 .p-main { flex: 1; min-width: 0; }
+.p-head { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 .p-name {
-  width: 100%; border: none; background: transparent;
-  font-family: var(--serif); font-size: 20px;
-  padding: 2px 0 6px;
-  border-bottom: 1px dashed var(--ink-14);
-  border-radius: 0;
+  flex: 1; min-width: 200px;
+  border: 1px solid var(--ink-14); border-radius: 3px;
+  background: rgba(255, 255, 255, .6);
+  font-family: var(--serif); font-size: 19px;
+  padding: 8px 12px;
 }
 .p-name::placeholder { color: var(--ink-45); font-style: italic; }
-.p-name:focus { outline: none; border-bottom: 1px solid var(--crimson); }
-.p-controls { display: flex; align-items: center; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+.p-name:focus { outline: none; border-color: var(--crimson); }
+.cpick { display: inline-flex; gap: 7px; align-items: center; }
+.cpick button { width: 17px; height: 17px; border-radius: 50%; background: var(--cc); transition: transform .12s var(--pop); }
+.cpick button:hover { transform: scale(1.18); }
+.cpick button.on { box-shadow: 0 0 0 2px var(--paper), 0 0 0 3.5px var(--ink); }
+.p-controls { display: flex; align-items: center; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
+
+.topics { margin-top: 12px; display: grid; gap: 7px; }
+.topic-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.topic-row .t-n { font-family: var(--mono); font-size: 11px; color: var(--ink-45); min-width: 20px; text-align: right; }
+.topic-in {
+  flex: 1; min-width: 180px;
+  border: 1px solid var(--ink-14); border-radius: 3px;
+  background: rgba(255, 255, 255, .5);
+  font-size: 14.5px; padding: 7px 10px;
+}
+.topic-in::placeholder { color: var(--ink-45); font-style: italic; }
+.topic-in:focus { outline: none; border-color: var(--crimson); }
+.topic-row .placed-tag { font-family: var(--mono); font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; color: #015C4C; border: 1px solid rgba(1, 92, 76, .35); border-radius: 2px; padding: 1px 5px; }
+.rp-group { display: inline-flex; gap: 4px; align-items: center; }
+.rp-lbl { font-family: var(--mono); font-size: 9.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-45); margin-right: 2px; }
+.rp-chip {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .05em; text-transform: uppercase;
+  border: 1px solid var(--ink-14); border-radius: 999px; padding: 3px 9px; color: var(--ink-45);
+  transition: background .12s, color .12s, border-color .12s;
+}
+.rp-chip:hover { border-color: var(--ink); color: var(--ink); }
+.rp-chip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); font-weight: 700; }
 
 .seg { display: inline-flex; border: 1px solid var(--ink-14); border-radius: 3px; overflow: hidden; }
 .seg-btn {
@@ -206,13 +229,6 @@ main[hidden] { display: none; }
 .frow .sw.f-prodej { background: var(--crimson); }
 .frow .pc { font-family: var(--mono); font-weight: 700; font-size: 14px; color: var(--ink); }
 
-.guard {
-  border-left: 3px solid var(--crimson);
-  padding: 8px 14px; margin-top: 12px;
-  font-family: var(--serif); font-style: italic; font-size: 15.5px;
-  color: var(--ink-70); background: rgba(152, 3, 35, .045);
-}
-
 .cta-row { display: flex; align-items: center; gap: 18px; margin-top: 40px; padding-top: 18px; border-top: 2px solid var(--ink); }
 .cta-hint { font-size: 13px; color: var(--ink-45); font-style: italic; font-family: var(--serif); }
 .cta-row .btn-primary { margin-left: auto; }
@@ -220,6 +236,7 @@ main[hidden] { display: none; }
 /* ========== KALENDÁŘ VIEW ========== */
 .cal-toolbar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
 .month-nav { display: flex; align-items: center; gap: 4px; margin: 0 auto; }
+.tb-actions { display: flex; gap: 8px; }
 .month-nav .mn-btn { width: 34px; height: 34px; font-size: 20px; color: var(--ink-70); border-radius: 3px; line-height: 1; }
 .month-nav .mn-btn:hover { background: rgba(31, 29, 24, .07); color: var(--ink); }
 .month-label { font-family: var(--mono); font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; min-width: 170px; text-align: center; }
@@ -231,16 +248,19 @@ main[hidden] { display: none; }
 .tray-head .t-progress b { color: var(--ink); }
 .tray { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 8px; scrollbar-width: thin; }
 .tcard {
-  flex: none; display: flex; align-items: center; gap: 10px;
+  flex: none; display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+  max-width: 210px; min-width: 120px;
   border: 1px solid var(--ink-14); border-left: 4px solid var(--c);
   background: rgba(255, 255, 255, .55);
-  padding: 9px 13px; border-radius: 3px;
-  font-size: 13.5px; font-weight: 500; text-align: left;
+  padding: 8px 12px; border-radius: 3px;
+  text-align: left;
   transition: transform .15s var(--pop), box-shadow .15s, border-color .15s;
 }
 .tcard:hover { transform: translateY(-2px); box-shadow: 2.5px 3px 0 rgba(31, 29, 24, .14); }
 .tcard.picked { border-color: var(--crimson); border-left-color: var(--c); box-shadow: 0 0 0 1.5px var(--crimson), 3px 3px 0 rgba(31, 29, 24, .14); }
-.tcard .tc-count { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--ink-45); }
+.tcard .tc-p { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-70); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.tcard .tc-i { font-size: 13px; font-weight: 500; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.tcard .tc-i.muted { font-family: var(--serif); font-style: italic; color: var(--ink-45); font-weight: 400; }
 .tray-empty { font-family: var(--serif); font-style: italic; color: var(--ink-45); font-size: 14.5px; padding: 6px 2px; }
 .tray-empty button { text-decoration: underline; color: var(--crimson); font: inherit; }
 
@@ -308,7 +328,8 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
   font-weight: 500;
 }
 .chip .ch-idea.empty { font-family: var(--serif); font-style: italic; color: var(--ink-45); font-weight: 400; }
-.chip .ch-format { display: inline-block; margin-top: 3px; font-family: var(--mono); font-size: 8.5px; letter-spacing: .07em; text-transform: uppercase; border: 1px solid var(--ink-14); padding: 1px 5px; border-radius: 2px; color: var(--ink-70); }
+.chip .ch-format { display: inline-block; margin-top: 3px; margin-right: 4px; font-family: var(--mono); font-size: 8.5px; letter-spacing: .07em; text-transform: uppercase; border: 1px solid var(--ink-14); padding: 1px 5px; border-radius: 2px; color: var(--ink-70); }
+.chip .ch-rep { display: block; margin-top: 2px; font-family: var(--mono); font-size: 8.5px; letter-spacing: .05em; text-transform: uppercase; color: #015C4C; }
 
 .stateless-note { margin-top: 14px; font-family: var(--serif); font-style: italic; font-size: 13.5px; color: var(--ink-45); }
 
@@ -380,6 +401,8 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
 @media (max-width: 640px) {
   .summary { grid-template-columns: 1fr; gap: 14px; }
   .p-del { margin-left: 0; }
+  .funnel-block { grid-template-columns: 1fr; gap: 16px; }
+  .funnel-block > div:last-child { max-width: 280px; margin: 0 auto; }
 }
 
 /* fade-up entrance */
@@ -400,12 +423,8 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
 /* ========== PRINT SHEET ========== */
 #print-sheet { font-family: var(--sans); color: #171512; }
 .pg-head { display: flex; align-items: center; gap: 5mm; padding-bottom: 3mm; border-bottom: .7mm solid #171512; }
-.pg-mono {
-  width: 12mm; height: 12mm; flex: none;
-  background: var(--crimson); color: #fff;
-  font-family: var(--serif); font-size: 6mm;
-  display: flex; align-items: center; justify-content: center;
-}
+.pg-logo { flex: none; display: flex; align-items: center; }
+.pg-logo svg { height: 10mm; width: auto; display: block; }
 .pg-title { font-family: var(--serif); font-size: 7.2mm; line-height: 1.05; }
 .pg-title em { color: var(--crimson); }
 .pg-month { font-family: var(--mono); font-size: 3.4mm; letter-spacing: .14em; text-transform: uppercase; margin-top: 1mm; color: #4a463f; }
@@ -437,7 +456,8 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
 .pg-cell:has(.pg-chip + .pg-chip) .pc-i { -webkit-line-clamp: 1; }
 .pg-cell:has(.pg-chip + .pg-chip) .pc-f { display: none; }
 .pg-chip .pc-line { display: block; height: 3.4mm; border-bottom: .3mm solid #a49e90; }
-.pg-chip .pc-f { display: inline-block; margin-top: .6mm; font-family: var(--mono); font-size: 2mm; letter-spacing: .06em; text-transform: uppercase; border: .25mm solid #c8c3b6; padding: 0 1mm; color: #4a463f; }
+.pg-chip .pc-f { display: inline-block; margin-top: .6mm; margin-right: .8mm; font-family: var(--mono); font-size: 2mm; letter-spacing: .06em; text-transform: uppercase; border: .25mm solid #c8c3b6; padding: 0 1mm; color: #4a463f; }
+.pg-chip .pc-r { color: #015C4C; border-color: rgba(1, 92, 76, .4); }
 .pg-foot { display: flex; align-items: baseline; gap: 3mm; padding-top: 2mm; margin-top: 2mm; border-top: .35mm solid #171512; font-family: var(--mono); font-size: 2.8mm; color: #4a463f; }
 .pg-foot .fr { margin-left: auto; font-family: var(--serif); font-style: italic; }
 
@@ -453,7 +473,12 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
 </head>
 <body>
 <header class="masthead">
-  <div class="monogram" aria-hidden="true">VM</div>
+  <div class="logo-mark" aria-hidden="true">
+    <svg viewBox="0 0 210 98" fill="none">
+      <path d="M6 54 Q15 66 24 53 Q33 39 42 53 Q50 65 58 51 L70 14 Q73 7 76 15 L86 78 Q89 88 93 78 L102 10 Q105 3 108 13 L116 62 Q120 74 126 60 Q132 46 140 54 Q148 62 156 48 Q164 36 174 50 Q182 62 192 50 Q198 43 204 50"
+        stroke="#015C4C" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
   <div class="masthead-title">
     <h1>Obsahový <em>kalendář</em></h1>
     <p class="tagline">Zdarma a bez registrace</p>
@@ -471,6 +496,9 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
 <section id="print-sheet" aria-hidden="true"></section>
 
 <script>
+window.onerror = (m, src, line, col) => {
+  document.documentElement.setAttribute('data-jserr', m + ' @' + line + ':' + col);
+};
 /* LOGIC-START */
 'use strict';
 
@@ -701,22 +729,64 @@ function esc(s) {
 }
 
 /* ---------- MIX VIEW ---------- */
-var PILLAR_EXAMPLES = [
-  'např. Rozbory kampaní kreslené v sešitě',
-  'např. Návod za 60 vteřin, vždy jedna věc',
-  'např. Za oponou: jak vzniká zakázka',
-  'např. Odpovědi na otázky z komentářů',
-  'např. Případovka: co zafungovalo a proč',
-  'např. Moje nabídka bez okolků'
-];
+const FUNNEL_SKETCH = `
+<svg class="sketch" viewBox="0 0 460 400" role="img" aria-label="Marketingový trychtýř: nahoře Dosah, uprostřed Důvěra, dole Prodej">
+  <g fill="none" stroke="#1F1D18" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M66 54 Q230 34 407 28"/>
+    <path d="M401 22 Q380 82 351 148"/>
+    <path d="M362 143 Q230 160 99 136"/>
+    <path d="M109 144 Q88 100 71 46"/>
+    <path d="M134 199 Q235 183 337 179"/>
+    <path d="M331 175 Q315 226 289 279"/>
+    <path d="M299 274 Q230 286 161 261"/>
+    <path d="M172 268 Q155 232 139 191"/>
+    <path d="M190 319 Q240 305 293 307"/>
+    <path d="M288 303 Q269 342 245 377"/>
+    <path d="M249 372 Q222 349 193 313"/>
+  </g>
+  <g fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M58 170 Q66 130 90 108" stroke="#1F1D18"/>
+    <path d="M82 122 L90 106 L72 108" stroke="#1F1D18"/>
+    <path d="M388 214 Q366 240 328 236" stroke="#57534A"/>
+    <path d="M342 226 L326 236 L342 248" stroke="#57534A"/>
+    <path d="M142 352 Q166 356 190 348" stroke="#980323"/>
+    <path d="M176 340 L192 347 L178 358" stroke="#980323"/>
+  </g>
+  <text x="12" y="200" fill="#1F1D18">Dosah</text>
+  <text x="342" y="200" fill="#57534A">Důvěra</text>
+  <text x="42" y="356" fill="#980323">Prodej</text>
+</svg>`;
+
+function topicsHtml(p) {
+  if (p.name.trim().length === 0) return '';
+  const cards = cardsForPillar(state, p.id);
+  if (!cards.length) return '';
+  return `<div class="topics">
+    ${cards.map((c, ti) => `
+      <div class="topic-row" data-card="${c.id}">
+        <span class="t-n num">${ti + 1}.</span>
+        <input class="topic-in" type="text" maxlength="120" value="${esc(c.idea)}"
+          placeholder="Téma ${ti + 1}" aria-label="Téma ${ti + 1}">
+        ${c.date ? '<span class="placed-tag">v kalendáři</span>' : ''}
+        <span class="rp-group"><span class="rp-lbl">Použít i na</span>${Object.keys(REPURPOSE).map(k =>
+          `<button type="button" class="rp-chip${c.repurpose.includes(k) ? ' on' : ''}" data-rp="${k}">${REPURPOSE[k]}</button>`).join('')}
+        </span>
+      </div>`).join('')}
+  </div>`;
+}
 
 function renderMix() {
   const rows = state.pillars.map((p, i) => `
     <div class="pillar-row rise" data-id="${p.id}" style="animation-delay:${i * 60}ms">
       <span class="p-dot" style="--c:${p.color}" aria-hidden="true"></span>
       <div class="p-main">
-        <input class="p-name" type="text" maxlength="60" value="${esc(p.name)}"
-          placeholder="${PILLAR_EXAMPLES[i % PILLAR_EXAMPLES.length]}" aria-label="Název pilíře ${i + 1}">
+        <div class="p-head">
+          <input class="p-name" type="text" maxlength="60" value="${esc(p.name)}"
+            placeholder="Pilíř ${i + 1}" aria-label="Název pilíře ${i + 1}">
+          <span class="cpick" role="group" aria-label="Barva pilíře">
+            ${PILLAR_COLORS.map(cc => `<button type="button" data-color="${cc}" class="${p.color === cc ? 'on' : ''}" style="--cc:${cc}" aria-label="Barva pilíře ${cc}"></button>`).join('')}
+          </span>
+        </div>
         <div class="p-controls">
           <div class="seg" role="group" aria-label="Role pilíře">
             ${Object.keys(FUNNEL).map(f => `<button type="button" class="seg-btn${p.funnel === f ? ' on' : ''}" data-funnel="${f}">${FUNNEL[f]}</button>`).join('')}
@@ -730,31 +800,35 @@ function renderMix() {
           <span class="st-cap">kusů / měsíc</span>
           <button type="button" class="p-del" aria-label="Smazat pilíř">×</button>
         </div>
+        ${topicsHtml(p)}
       </div>
     </div>`).join('');
 
   $('#view-mix').innerHTML = `
     <div class="sheet-col">
       <section class="rise">
-        <h2 class="lede">Naplánuj si celý měsíc obsahu <em>na jedno posezení</em>.</h2>
-        <p class="intro-sub">Nejdřív si navolíš, co tvoříš a v jakém poměru. Pak to rozložíš do kalendáře
-        a vytiskneš. Zabere to zhruba půl hodiny. A nic se tu neukládá, hotový plán si na konci stáhneš jako PDF.</p>
+        <h2 class="lede">Naplánuj si celý měsíc obsahu <em>za 10 minut</em>.</h2>
+        <p class="intro-sub">Nejdřív si navolíš, co tvoříš a v jakém poměru. Pak to na další stránce
+        rozložíš do kalendáře a vytiskneš nebo uložíš jako obrázek.</p>
       </section>
 
-      <div class="sec-label rise" style="animation-delay:60ms"><span class="n">01</span> Tři role obsahu</div>
-      <section class="roles rise" style="animation-delay:90ms">
-        <div class="role-line"><span class="role-swatch f-dosah" style="background:var(--ink)"></span><b>Dosah</b><span>zastaví lidi, kteří tě ještě neznají</span></div>
-        <div class="role-line"><span class="role-swatch" style="background:rgba(31,29,24,.42)"></span><b>Důvěra</b><span>ukazuje, jak přemýšlíš, a lidi se vracejí</span></div>
-        <div class="role-line"><span class="role-swatch" style="background:var(--crimson)"></span><b>Prodej</b><span>říká si o akci: poptávku, e-mail, nákup</span></div>
+      <section class="funnel-block rise" style="animation-delay:80ms">
+        <div>
+          <h3>Tři role obsahu <em>v cestě k zákazníkovi</em></h3>
+          <div class="role-line"><span class="role-swatch" style="background:var(--ink)"></span><b>Dosah</b><span>zastaví lidi, kteří tě ještě neznají</span></div>
+          <div class="role-line"><span class="role-swatch" style="background:rgba(31,29,24,.42)"></span><b>Důvěra</b><span>ukazuje, jak přemýšlíš, a lidi se vracejí</span></div>
+          <div class="role-line"><span class="role-swatch" style="background:var(--crimson)"></span><b>Prodej</b><span>říká si o akci: poptávku, e-mail, nákup</span></div>
+        </div>
+        <div>${FUNNEL_SKETCH}</div>
       </section>
 
-      <div class="sec-label" style="animation-delay:120ms"><span class="n">02</span> Tvoje pilíře <span class="sec-hint">· ideálně 3–5 · pilíř = téma + podoba</span></div>
+      <div class="sec-label"><span class="n">01</span> Tvoje pilíře</div>
       <section id="pillar-list">${rows}</section>
       <div class="add-row">
         <button type="button" class="add-pillar" id="add-pillar" ${state.pillars.length >= MAX_PILLARS ? 'disabled' : ''}>Přidat pilíř</button>
       </div>
 
-      <div class="sec-label"><span class="n">03</span> Rozložení měsíce</div>
+      <div class="sec-label"><span class="n">02</span> Rozložení měsíce</div>
       <section id="mix-summary"></section>
 
       <div class="cta-row">
@@ -767,7 +841,6 @@ function renderMix() {
 
 function renderSummary() {
   const fb = funnelBreakdown(state);
-  const guards = guardrails(state);
   const bar = fb.total === 0
     ? `<div class="fbar" role="img" aria-label="Zatím žádné kusy"></div>`
     : `<div class="fbar" role="img" aria-label="Rozložení rolí">${fb.rows.filter(r => r.count > 0).map(r =>
@@ -783,8 +856,7 @@ function renderSummary() {
         <div class="frows">${fb.rows.map(r =>
           `<div class="frow"><span class="sw f-${r.funnel}"></span>${FUNNEL[r.funnel]} <span class="num">${r.count}×</span> <span class="pc num">${r.pct} %</span></div>`).join('')}</div>
       </div>
-    </div>
-    ${guards.map(g => `<div class="guard">${esc(g.message)}</div>`).join('')}`;
+    </div>`;
   const named = namedPillars(state).length > 0;
   const btn = $('#go-cal');
   if (btn) {
@@ -793,13 +865,29 @@ function renderSummary() {
   }
 }
 
+function updateTopicsRow(row, pillarId) {
+  const p = getPillar(state, pillarId);
+  const existing = row.querySelector('.topics');
+  if (existing) existing.remove();
+  const html = topicsHtml(p);
+  if (html) row.querySelector('.p-main').insertAdjacentHTML('beforeend', html);
+}
+
 function bindMix() {
   const view = $('#view-mix');
   view.addEventListener('input', e => {
     const row = e.target.closest('.pillar-row');
-    if (row && e.target.classList.contains('p-name')) {
-      renamePillar(state, Number(row.dataset.id), e.target.value);
-      renderSummary(); // jemný update — nesahat na DOM s fokusem
+    if (!row) return;
+    const id = Number(row.dataset.id);
+    if (e.target.classList.contains('p-name')) {
+      const wasNamed = getPillar(state, id).name.trim().length > 0;
+      renamePillar(state, id, e.target.value);
+      const isNamed = e.target.value.trim().length > 0;
+      if (wasNamed !== isNamed) { syncCards(state); updateTopicsRow(row, id); } // témata se objeví/schovají, fokus jména zůstává
+      renderSummary();
+    }
+    if (e.target.classList.contains('topic-in')) {
+      setIdea(state, Number(e.target.closest('.topic-row').dataset.card), e.target.value);
     }
   });
   view.addEventListener('click', e => {
@@ -813,6 +901,14 @@ function bindMix() {
       if (e.target.classList.contains('st-btn')) {
         if (e.target.dataset.act === 'inc') incCount(state, id); else decCount(state, id);
         syncCards(state); renderMix(); return;
+      }
+      if (e.target.dataset.color) {
+        setPillarColor(state, id, e.target.dataset.color);
+        renderMix(); return;
+      }
+      if (e.target.classList.contains('rp-chip')) {
+        toggleRepurpose(state, Number(e.target.closest('.topic-row').dataset.card), e.target.dataset.rp);
+        e.target.classList.toggle('on'); return;
       }
       if (e.target.classList.contains('p-del')) {
         const placed = state.cards.filter(c => c.pillarId === id && c.date !== null).length;
@@ -835,16 +931,6 @@ function goToCalendar() {
 /* ---------- KALENDÁŘ VIEW ---------- */
 let pendingCardId = null;
 
-function groupedTray() {
-  const groups = [];
-  for (const c of trayCards(state)) {
-    const last = groups[groups.length - 1];
-    if (last && last.pillar.id === c.pillarId) { last.count += 1; }
-    else { groups.push({ pillar: getPillar(state, c.pillarId), count: 1, firstCardId: c.id }); }
-  }
-  return groups;
-}
-
 var MONTHS_CZ_GEN = ['ledna', 'února', 'března', 'dubna', 'května', 'června', 'července', 'srpna', 'září', 'října', 'listopadu', 'prosince'];
 function fmtDayLabel(iso) {
   const [y, m, d] = iso.split('-').map(Number);
@@ -856,8 +942,19 @@ function chipHtml(c) {
   const idea = c.idea.trim();
   return `<button type="button" class="chip" data-card="${c.id}" style="--c:${p.color}">
     <span class="ch-pillar">${esc(pillarLabel(state, p))}</span>
-    <span class="ch-idea${idea ? '' : ' empty'}">${idea ? esc(idea) : 'zatím bez nápadu'}</span>
+    <span class="ch-idea${idea ? '' : ' empty'}">${idea ? esc(idea) : 'zatím bez tématu'}</span>
     ${c.format ? `<span class="ch-format">${FORMATS[c.format]}</span>` : ''}
+    ${c.repurpose.length ? `<span class="ch-rep">+ ${c.repurpose.map(k => REPURPOSE[k]).join(' · ')}</span>` : ''}
+  </button>`;
+}
+
+function trayCardHtml(c) {
+  const p = getPillar(state, c.pillarId);
+  const idea = c.idea.trim();
+  return `<button type="button" class="tcard${pendingCardId === c.id ? ' picked' : ''}"
+    data-pick="${c.id}" style="--c:${p.color}">
+    <span class="tc-p">${esc(pillarLabel(state, p))}</span>
+    <span class="tc-i${idea ? '' : ' muted'}">${idea ? esc(idea) : 'bez tématu'}</span>
   </button>`;
 }
 
@@ -867,7 +964,7 @@ function renderCal() {
   const pad = (7 - (grid.length % 7)) % 7;
   const today = localTodayIso();
   const pr = progress(state);
-  const groups = groupedTray();
+  const tray = trayCards(state);
   const pendingCard = pendingCardId ? getCard(state, pendingCardId) : null;
 
   const cellHtml = c => {
@@ -877,13 +974,9 @@ function renderCal() {
       aria-label="${c.day}. den, přidat kus">${chips}<span class="cell-add num">+</span><span class="cell-day num">${c.day}</span></div>`;
   };
 
-  const trayHtml = groups.length === 0
+  const trayHtml = tray.length === 0
     ? `<div class="tray-empty">Všechny kusy už jsou v kalendáři. <button type="button" data-go="mix">Přidat další v mixu</button></div>`
-    : `<div class="tray">${groups.map(g => `
-        <button type="button" class="tcard${pendingCard && pendingCard.pillarId === g.pillar.id ? ' picked' : ''}"
-          data-pick="${g.firstCardId}" style="--c:${g.pillar.color}">
-          ${esc(pillarLabel(state, g.pillar))} <span class="tc-count">×${g.count}</span>
-        </button>`).join('')}</div>`;
+    : `<div class="tray">${tray.map(trayCardHtml).join('')}</div>`;
 
   const agendaHtml = grid.filter(Boolean).map(c => {
     const dowIdx = (meta.offset + c.day - 1) % 7;
@@ -906,10 +999,13 @@ function renderCal() {
         <span class="month-label">${meta.label}</span>
         <button type="button" class="mn-btn" id="m-next" aria-label="Další měsíc">›</button>
       </div>
-      <button type="button" class="btn btn-primary btn-sm" id="do-print">Exportovat PDF</button>
+      <div class="tb-actions">
+        <button type="button" class="btn btn-ghost btn-sm" id="do-img">Uložit obrázek</button>
+        <button type="button" class="btn btn-primary btn-sm" id="do-print">Uložit PDF</button>
+      </div>
     </div>
     ${pendingCard ? `<div class="placing-bar">Teď vyber den pro
-      „${esc(pillarLabel(state, getPillar(state, pendingCard.pillarId)))}".
+      „${esc(pendingCard.idea.trim() || pillarLabel(state, getPillar(state, pendingCard.pillarId)))}".
       <button type="button" id="cancel-pick">zrušit</button></div>` : ''}
     <section class="tray-wrap">
       <div class="tray-head">
@@ -923,7 +1019,7 @@ function renderCal() {
       <div class="cal-grid">${grid.map(cellHtml).join('')}${'<div class="cell off" aria-hidden="true"></div>'.repeat(pad)}</div>
     </section>
     <section class="agenda">${agendaHtml}</section>
-    <p class="stateless-note">Plán se po zavření stránky neuloží. Hotový kalendář si exportuj do PDF.</p>`;
+    <p class="stateless-note">Plán se po zavření stránky neuloží. Hotový kalendář si ulož jako PDF nebo obrázek.</p>`;
 
   document.body.classList.toggle('placing', !!pendingCard);
   applyDraggable();
@@ -949,14 +1045,18 @@ function placeOn(iso) {
 function closeModal() { $('#modal-root').innerHTML = ''; }
 
 function openDayPicker(iso) {
-  const groups = groupedTray();
-  const body = groups.length === 0
+  const tray = trayCards(state);
+  const body = tray.length === 0
     ? `<p class="sheet-note">Všechny kusy už jsou v kalendáři. Přidat další můžeš v mixu.</p>
        <div class="panel-actions"><button type="button" class="btn btn-ghost btn-sm" data-go="mix">← Upravit mix</button></div>`
-    : `<div class="pick-list">${groups.map(g => `
-        <button type="button" class="tcard" data-place="${g.firstCardId}" style="--c:${g.pillar.color}">
-          ${esc(pillarLabel(state, g.pillar))} <span class="tc-count">×${g.count}</span>
-        </button>`).join('')}</div>`;
+    : `<div class="pick-list">${tray.map(c => {
+        const p = getPillar(state, c.pillarId);
+        const idea = c.idea.trim();
+        return `<button type="button" class="tcard" data-place="${c.id}" style="--c:${p.color}">
+          <span class="tc-p">${esc(pillarLabel(state, p))}</span>
+          <span class="tc-i${idea ? '' : ' muted'}">${idea ? esc(idea) : 'bez tématu'}</span>
+        </button>`;
+      }).join('')}</div>`;
   $('#modal-root').innerHTML = `
     <div class="backdrop" data-close="1">
       <div class="panel" role="dialog" aria-modal="true" aria-label="Přidat kus na ${fmtDayLabel(iso)}" data-iso="${iso}">
@@ -989,6 +1089,10 @@ function openCardModal(cardId) {
           <button type="button" class="seg-btn${c.format === null ? ' on' : ''}" data-fmt="">Bez formátu</button>
           ${Object.keys(FORMATS).map(f => `<button type="button" class="seg-btn${c.format === f ? ' on' : ''}" data-fmt="${f}">${FORMATS[f]}</button>`).join('')}
         </div>
+        <label class="f-lbl">Použít i na <span style="opacity:.55">(přebalení)</span></label>
+        <div class="rp-group" role="group" aria-label="Použít i na">
+          ${Object.keys(REPURPOSE).map(k => `<button type="button" class="rp-chip${c.repurpose.includes(k) ? ' on' : ''}" data-rp="${k}">${REPURPOSE[k]}</button>`).join('')}
+        </div>
         <div class="panel-actions">
           <button type="button" class="btn btn-ghost btn-sm" data-act="move">Přesunout</button>
           <button type="button" class="btn btn-ghost btn-sm" data-act="untray">Vrátit do zásobníku</button>
@@ -1007,6 +1111,7 @@ function bindCal() {
     if (e.target.id === 'm-prev') { state.viewMonth = addMonths(state.viewMonth, -1); renderCal(); return; }
     if (e.target.id === 'm-next') { state.viewMonth = addMonths(state.viewMonth, 1); renderCal(); return; }
     if (e.target.id === 'do-print') { doPrint(); return; }
+    if (e.target.id === 'do-img') { exportImage(); return; }
     if (e.target.id === 'cancel-pick') { cancelPick(); return; }
     const pickBtn = e.target.closest('[data-pick]');
     if (pickBtn) {
@@ -1041,6 +1146,11 @@ function bindCal() {
     const panel = e.target.closest('.panel[data-card]');
     if (panel) {
       const cardId = Number(panel.dataset.card);
+      if (e.target.classList.contains('rp-chip')) {
+        toggleRepurpose(state, cardId, e.target.dataset.rp);
+        e.target.classList.toggle('on');
+        return;
+      }
       if (e.target.dataset.fmt !== undefined) {
         setFormat(state, cardId, e.target.dataset.fmt === '' ? null : e.target.dataset.fmt);
         panel.querySelectorAll('[data-fmt]').forEach(b => b.classList.toggle('on',
@@ -1105,6 +1215,7 @@ function renderPrintSheet() {
       <span class="pc-p">${esc(pillarLabel(state, p))}</span>
       ${idea ? `<span class="pc-i">${esc(idea)}</span>` : '<span class="pc-line"></span>'}
       ${c.format ? `<span class="pc-f">${FORMATS[c.format]}</span>` : ''}
+      ${c.repurpose.map(k => `<span class="pc-f pc-r">+${REPURPOSE[k]}</span>`).join('')}
     </span>`;
   };
   const cellHtml = c => {
@@ -1116,7 +1227,7 @@ function renderPrintSheet() {
 
   $('#print-sheet').innerHTML = `
     <div class="pg-head">
-      <span class="pg-mono">VM</span>
+      <span class="pg-logo"><svg viewBox="0 0 210 98" fill="none"><path d="M6 54 Q15 66 24 53 Q33 39 42 53 Q50 65 58 51 L70 14 Q73 7 76 15 L86 78 Q89 88 93 78 L102 10 Q105 3 108 13 L116 62 Q120 74 126 60 Q132 46 140 54 Q148 62 156 48 Q164 36 174 50 Q182 62 192 50 Q198 43 204 50" stroke="#015C4C" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       <div>
         <div class="pg-title">Obsahový <em>kalendář</em></div>
         <div class="pg-month">${meta.label}</div>
@@ -1136,16 +1247,249 @@ function renderPrintSheet() {
     </div>`;
 }
 
-function doPrint() {
+function confirmUnplaced() {
   const left = trayCards(state).length;
-  if (left > 0) {
-    const msg = left === 1 ? 'V zásobníku ti zbývá poslední kus.'
-      : left <= 4 ? 'V zásobníku ti zbývají ještě ' + left + ' kusy.'
-      : 'V zásobníku ti zbývá ještě ' + left + ' kusů.';
-    if (!confirm(msg + ' Vytisknout kalendář i tak?')) return;
-  }
+  if (left === 0) return true;
+  const msg = left === 1 ? 'V zásobníku ti zbývá poslední kus.'
+    : left <= 4 ? 'V zásobníku ti zbývají ještě ' + left + ' kusy.'
+    : 'V zásobníku ti zbývá ještě ' + left + ' kusů.';
+  return confirm(msg + ' Pokračovat i tak?');
+}
+
+function doPrint() {
+  if (!confirmUnplaced()) return;
   renderPrintSheet();
   window.print();
+}
+
+/* Export do PNG: print sheet kreslený přímo na canvas 2D.
+   (foreignObject → canvas Chrome taintuje, proto ruční kreslení.) */
+var LOGO_PATH_D = 'M6 54 Q15 66 24 53 Q33 39 42 53 Q50 65 58 51 L70 14 Q73 7 76 15 L86 78 Q89 88 93 78 L102 10 Q105 3 108 13 L116 62 Q120 74 126 60 Q132 46 140 54 Q148 62 156 48 Q164 36 174 50 Q182 62 192 50 Q198 43 204 50';
+
+function wrapText(cx, text, maxW, maxLines) {
+  const words = text.split(/\s+/);
+  const lines = [];
+  let line = '';
+  for (const w of words) {
+    const test = line ? line + ' ' + w : w;
+    if (cx.measureText(test).width <= maxW || !line) { line = test; }
+    else {
+      lines.push(line); line = w;
+      if (lines.length === maxLines) break;
+    }
+  }
+  if (lines.length < maxLines && line) lines.push(line);
+  if (lines.length === maxLines && cx.measureText(lines[maxLines - 1]).width > maxW) {
+    let last = lines[maxLines - 1];
+    while (last && cx.measureText(last + '…').width > maxW) last = last.slice(0, -1);
+    lines[maxLines - 1] = last + '…';
+  }
+  return lines;
+}
+
+function drawSheet(cx, W, H) {
+  const INK = '#171512', GREY = '#4a463f', FAINT = '#8d8778', LINE = '#b9b4a8', CRIMSON = '#980323', TEAL = '#015C4C';
+  const PAD = 30, RIGHT = W - PAD;
+  const meta = monthMeta(state.viewMonth);
+  const grid = monthGrid(state.viewMonth);
+  const fb = funnelBreakdown(state);
+  const named = namedPillars(state);
+  const today = localTodayIso();
+
+  cx.fillStyle = '#fff'; cx.fillRect(0, 0, W, H);
+  cx.textBaseline = 'alphabetic';
+
+  // hlavička: logo + titul + měsíc + celkem
+  cx.save();
+  cx.translate(PAD, PAD - 2); cx.scale(0.42, 0.42);
+  cx.strokeStyle = TEAL; cx.lineWidth = 7; cx.lineCap = 'round'; cx.lineJoin = 'round';
+  cx.stroke(new Path2D(LOGO_PATH_D));
+  cx.restore();
+  const titleX = PAD + 104;
+  cx.fillStyle = INK; cx.font = '27px "Instrument Serif", Georgia, serif';
+  cx.fillText('Obsahový ', titleX, PAD + 24);
+  const obsW = cx.measureText('Obsahový ').width;
+  cx.fillStyle = CRIMSON; cx.font = 'italic 27px "Instrument Serif", Georgia, serif';
+  cx.fillText('kalendář', titleX + obsW, PAD + 24);
+  cx.fillStyle = GREY; cx.font = '700 12px "JetBrains Mono", monospace';
+  cx.fillText(meta.label.toUpperCase(), titleX, PAD + 42);
+  cx.textAlign = 'right';
+  cx.fillStyle = INK; cx.font = '700 24px "JetBrains Mono", monospace';
+  cx.fillText(String(fb.total), RIGHT, PAD + 24);
+  cx.fillStyle = GREY; cx.font = '11px "JetBrains Mono", monospace';
+  cx.fillText(kusy(fb.total) + ' obsahu', RIGHT, PAD + 40);
+  cx.textAlign = 'left';
+  cx.strokeStyle = INK; cx.lineWidth = 2.5;
+  cx.beginPath(); cx.moveTo(PAD, PAD + 52); cx.lineTo(RIGHT, PAD + 52); cx.stroke();
+
+  // legenda pilířů
+  let lx = PAD, ly = PAD + 72;
+  for (const p of named) {
+    cx.font = '700 11px "Space Grotesk", sans-serif';
+    const nameW = cx.measureText(p.name.trim()).width;
+    cx.font = '9.5px "JetBrains Mono", monospace';
+    const metaTxt = ' ' + p.count + '× · ' + FUNNEL[p.funnel] + ' · ' + (fb.total ? Math.round(p.count * 100 / fb.total) : 0) + ' %';
+    const itemW = 13 + nameW + cx.measureText(metaTxt).width + 22;
+    if (lx + itemW > RIGHT && lx > PAD) { lx = PAD; ly += 17; }
+    cx.fillStyle = p.color; cx.fillRect(lx, ly - 8, 9, 9);
+    cx.fillStyle = INK; cx.font = '700 11px "Space Grotesk", sans-serif';
+    cx.fillText(p.name.trim(), lx + 13, ly);
+    cx.fillStyle = GREY; cx.font = '9.5px "JetBrains Mono", monospace';
+    cx.fillText(metaTxt, lx + 13 + nameW, ly);
+    lx += itemW;
+  }
+
+  // dny v týdnu + mřížka
+  const gridTop = ly + 24;
+  const footY = H - PAD - 8;
+  const gridBottom = footY - 16;
+  const cellW = (RIGHT - PAD) / 7;
+  const rows = Math.ceil((grid.length + (7 - (grid.length % 7)) % 7) / 7);
+  const cellH = (gridBottom - gridTop) / rows;
+  const DOW = ['PO', 'ÚT', 'ST', 'ČT', 'PÁ', 'SO', 'NE'];
+  cx.font = '700 9px "JetBrains Mono", monospace';
+  cx.textAlign = 'right';
+  DOW.forEach((d, i) => {
+    cx.fillStyle = i >= 5 ? CRIMSON : GREY;
+    cx.fillText(d, PAD + (i + 1) * cellW - 5, gridTop - 6);
+  });
+  cx.textAlign = 'left';
+
+  cx.strokeStyle = LINE; cx.lineWidth = .8;
+  for (let r = 0; r <= rows; r++) {
+    cx.beginPath(); cx.moveTo(PAD, gridTop + r * cellH); cx.lineTo(RIGHT, gridTop + r * cellH); cx.stroke();
+  }
+  for (let c = 0; c <= 7; c++) {
+    cx.beginPath(); cx.moveTo(PAD + c * cellW, gridTop); cx.lineTo(PAD + c * cellW, gridBottom); cx.stroke();
+  }
+
+  const cells = [...grid];
+  while (cells.length % 7 !== 0) cells.push(null);
+  while (cells.length < rows * 7) cells.push(null);
+  cells.forEach((cell, idx) => {
+    const cxr = idx % 7, cyr = Math.floor(idx / 7);
+    const x = PAD + cxr * cellW, y = gridTop + cyr * cellH;
+    if (!cell) {
+      cx.fillStyle = 'rgba(23,21,18,.035)';
+      cx.fillRect(x + .5, y + .5, cellW - 1, cellH - 1);
+      return;
+    }
+    if (cell.iso === today) {
+      cx.strokeStyle = CRIMSON; cx.lineWidth = 1.4;
+      cx.strokeRect(x + 1, y + 1, cellW - 2, cellH - 2);
+    }
+    cx.fillStyle = cell.iso === today ? CRIMSON : FAINT;
+    cx.font = (cell.iso === today ? '700 ' : '') + '9px "JetBrains Mono", monospace';
+    cx.textAlign = 'right';
+    cx.fillText(String(cell.day), x + cellW - 5, y + cellH - 5);
+    cx.textAlign = 'left';
+
+    const cards = placedForDate(state, cell.iso);
+    if (!cards.length) return;
+    cx.save();
+    cx.beginPath(); cx.rect(x + 1, y + 1, cellW - 2, cellH - 13); cx.clip();
+    const compact = cards.length > 1;
+    let chipY = y + 4;
+    for (const card of cards) {
+      const p = getPillar(state, card.pillarId);
+      const chipX = x + 4, chipW = cellW - 8, innerX = chipX + 9;
+      const idea = card.idea.trim();
+      cx.font = '500 10px "Space Grotesk", sans-serif';
+      const ideaLines = idea ? wrapText(cx, idea, chipW - 14, compact ? 1 : 3) : [];
+      const tags = [];
+      if (!compact && card.format) tags.push(FORMATS[card.format].toUpperCase());
+      if (!compact) card.repurpose.forEach(k => tags.push('+' + REPURPOSE[k].toUpperCase()));
+      const chipH = 7 + 9 + (idea ? ideaLines.length * 12 : 9) + (tags.length ? 13 : 0) + 4;
+      cx.fillStyle = '#fff';
+      cx.fillRect(chipX, chipY, chipW, chipH);
+      cx.strokeStyle = '#c8c3b6'; cx.lineWidth = .7;
+      cx.strokeRect(chipX + .35, chipY + .35, chipW - .7, chipH - .7);
+      cx.fillStyle = p.color; cx.fillRect(chipX, chipY, 3.5, chipH);
+      cx.fillStyle = GREY; cx.font = '700 7.5px "JetBrains Mono", monospace';
+      let plabel = pillarLabel(state, p).toUpperCase();
+      while (plabel && cx.measureText(plabel + '…').width > chipW - 14) plabel = plabel.slice(0, -1);
+      cx.fillText(plabel.length < pillarLabel(state, p).length ? plabel + '…' : plabel, innerX, chipY + 13);
+      let ty = chipY + 25;
+      if (idea) {
+        cx.fillStyle = INK; cx.font = '500 10px "Space Grotesk", sans-serif';
+        for (const ln of ideaLines) { cx.fillText(ln, innerX, ty); ty += 12; }
+      } else {
+        cx.strokeStyle = '#a49e90'; cx.lineWidth = .8;
+        cx.beginPath(); cx.moveTo(innerX, ty - 2); cx.lineTo(chipX + chipW - 6, ty - 2); cx.stroke();
+        ty += 9;
+      }
+      if (tags.length) {
+        let tx = innerX;
+        cx.font = '6.5px "JetBrains Mono", monospace';
+        for (const tag of tags) {
+          const tw = cx.measureText(tag).width + 6;
+          cx.strokeStyle = tag.startsWith('+') ? 'rgba(1,92,76,.4)' : '#c8c3b6';
+          cx.strokeRect(tx, ty - 7, tw, 10);
+          cx.fillStyle = tag.startsWith('+') ? TEAL : GREY;
+          cx.fillText(tag, tx + 3, ty);
+          tx += tw + 4;
+        }
+      }
+      chipY += chipH + 3;
+    }
+    cx.restore();
+  });
+
+  // patička
+  cx.strokeStyle = INK; cx.lineWidth = 1;
+  cx.beginPath(); cx.moveTo(PAD, footY - 4); cx.lineTo(RIGHT, footY - 4); cx.stroke();
+  cx.fillStyle = GREY; cx.font = '10px "JetBrains Mono", monospace';
+  cx.fillText('Marian Vlk · vlkmar.cz', PAD, footY + 10);
+  cx.textAlign = 'right';
+  cx.font = 'italic 11px "Instrument Serif", Georgia, serif';
+  cx.fillText('Obsahový kalendář · kalendar.vlkmar.cz', RIGHT, footY + 10);
+  cx.textAlign = 'left';
+}
+
+async function exportImage(skipConfirm) {
+  if (!skipConfirm && !confirmUnplaced()) return;
+  const btn = $('#do-img');
+  if (btn) { btn.disabled = true; btn.textContent = 'Připravuju…'; }
+  const dbg = location.search.includes('e2e=img')
+    ? s => document.documentElement.setAttribute('data-e2e-img', s)
+    : () => {};
+  try {
+    dbg('step:start');
+    await Promise.all([
+      document.fonts.load('27px "Instrument Serif"'), document.fonts.load('italic 27px "Instrument Serif"'),
+      document.fonts.load('700 12px "JetBrains Mono"'), document.fonts.load('12px "JetBrains Mono"'),
+      document.fonts.load('700 11px "Space Grotesk"'), document.fonts.load('500 10px "Space Grotesk"')
+    ]).catch(() => {});
+    await document.fonts.ready;
+    dbg('step:fonts');
+    const MM = 96 / 25.4, W = Math.round(297 * MM), H = Math.round(210 * MM), S = 2;
+    const canvas = document.createElement('canvas');
+    canvas.width = W * S; canvas.height = H * S;
+    const cx = canvas.getContext('2d');
+    cx.scale(S, S);
+    drawSheet(cx, W, H);
+    dbg('step:drawn');
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    if (!blob) throw new Error('png blob');
+    if (location.search.includes('e2e=img')) {
+      document.documentElement.setAttribute('data-e2e-img', 'ok ' + blob.size);
+      const shot = new Image(); // výsledek ukázat v okně, ať ho screenshot test zachytí
+      shot.src = URL.createObjectURL(blob);
+      shot.style.cssText = 'position:fixed;inset:0;width:100vw;height:auto;z-index:9999;background:#fff';
+      document.body.appendChild(shot);
+      return;
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'obsahovy-kalendar-' + state.viewMonth + '.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  } catch (err) {
+    if (location.search.includes('e2e=img')) document.documentElement.setAttribute('data-e2e-img', 'FAIL ' + err.message);
+    alert('Obrázek se nepodařilo vytvořit. Použij prosím Uložit PDF.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Uložit obrázek'; }
+  }
 }
 window.addEventListener('beforeprint', renderPrintSheet);
 window.addEventListener('beforeunload', e => {
@@ -1164,8 +1508,20 @@ renderMix();
 bindMix();
 bindCal();
 
-/* e2e hook: ?e2e=print — demo stav pro vizuální kontrolu tisku */
-if (location.search.includes('e2e=print')) {
+/* e2e hook: ?e2e=mix — pojmenované pilíře pro vizuální kontrolu témat v mixu */
+if (location.search.includes('e2e=mix')) {
+  const [a, b] = state.pillars;
+  renamePillar(state, a.id, 'Food'); syncCards(state);
+  renamePillar(state, b.id, 'Trénink v posilovně'); setFunnel(state, b.id, 'duvera'); syncCards(state);
+  const t = cardsForPillar(state, a.id);
+  setIdea(state, t[0].id, 'Jak jíst zdravě');
+  setIdea(state, t[1].id, 'Proč nejíst před spaním');
+  toggleRepurpose(state, t[0].id, 'carousel'); toggleRepurpose(state, t[0].id, 'newsletter');
+  renderMix();
+}
+
+/* e2e hooky: ?e2e=print / ?e2e=img — demo stav pro vizuální kontrolu tisku a exportu obrázku */
+if (location.search.includes('e2e=print') || location.search.includes('e2e=img')) {
   const [a, b, c] = state.pillars;
   renamePillar(state, a.id, 'Rozbory kampaní v sešitě');
   renamePillar(state, b.id, 'Návody za 60 vteřin'); setFunnel(state, b.id, 'duvera'); incCount(state, b.id);
@@ -1186,8 +1542,10 @@ if (location.search.includes('e2e=print')) {
   put(6, 12, 'První věta, která zastaví palec', 'video');
   put(9, 17, 'Jak vypadá spolupráce se mnou', 'text');
   put(2, 24, 'Sešit: anatomie letáku, který funguje', null);
+  toggleRepurpose(state, t[0].id, 'carousel'); toggleRepurpose(state, t[0].id, 'newsletter');
+  toggleRepurpose(state, t[9].id, 'text');
   goToCalendar();
-  renderPrintSheet();
+  if (location.search.includes('e2e=img')) { exportImage(true); } else { renderPrintSheet(); }
 }
 
 /* e2e hook: ?e2e=1 — place → přepnutí měsíce tam a zpět → assert persistence */
