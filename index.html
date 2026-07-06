@@ -134,7 +134,7 @@ main[hidden] { display: none; }
 .lede em { color: var(--crimson); }
 .intro-sub { max-width: 560px; color: var(--ink-70); font-size: 15px; margin-top: 10px; }
 
-.intro-grid { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 22px 52px; align-items: start; }
+.intro-grid { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 22px 40px; align-items: start; }
 .role-card {
   border: var(--hair); border-radius: 3px;
   background: rgba(255, 255, 255, .35);
@@ -143,7 +143,9 @@ main[hidden] { display: none; }
 }
 .role-card h3 { font-size: 18px; }
 .role-card h3 em { color: var(--crimson); }
-.role-funnel { display: block; width: 78%; max-width: 230px; margin: 8px auto 4px; height: auto; }
+.role-row { display: flex; gap: 8px 16px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+.role-funnel { display: block; width: 132px; max-width: 100%; flex: none; height: auto; margin: 0 auto; }
+.role-lines { flex: 1; min-width: 190px; }
 .role-line { display: flex; align-items: baseline; gap: 9px; padding: 7px 0; }
 .role-line + .role-line { border-top: var(--hair); }
 .role-swatch { width: 9px; height: 9px; flex: none; transform: translateY(.5px); }
@@ -818,10 +820,14 @@ function renderMix() {
         </div>
         <aside class="role-card" aria-label="Tři role obsahu">
           <h3>Tři role obsahu <em>v cestě k zákazníkovi</em></h3>
-          <img class="role-funnel" src="funnel.png" alt="Ručně kreslený trychtýř: dosah, důvěra, prodej">
-          <div class="role-line"><span class="role-swatch" style="background:var(--ink)"></span><b>Dosah</b><span>Snažíš se zaujmout lidi, kteří tě ještě neznají.</span></div>
-          <div class="role-line"><span class="role-swatch" style="background:rgba(31,29,24,.42)"></span><b>Důvěra</b><span>Představuje tvé uvažování a buduje vztah, takže se rádi vracejí.</span></div>
-          <div class="role-line"><span class="role-swatch" style="background:var(--crimson)"></span><b>Prodej</b><span>Ukazuje, jak funguje tvé řešení, a odstraňuje bariéry k nákupu.</span></div>
+          <div class="role-row">
+            <img class="role-funnel" src="funnel.png" alt="Ručně kreslený trychtýř: dosah, důvěra, prodej">
+            <div class="role-lines">
+              <div class="role-line"><span class="role-swatch" style="background:var(--ink)"></span><b>Dosah</b><span>Snažíš se zaujmout lidi, kteří tě ještě neznají.</span></div>
+              <div class="role-line"><span class="role-swatch" style="background:rgba(31,29,24,.42)"></span><b>Důvěra</b><span>Představuje tvé uvažování a buduje vztah, takže se rádi vracejí.</span></div>
+              <div class="role-line"><span class="role-swatch" style="background:var(--crimson)"></span><b>Prodej</b><span>Ukazuje, jak funguje tvé řešení, a odstraňuje bariéry k nákupu.</span></div>
+            </div>
+          </div>
         </aside>
       </section>
 
