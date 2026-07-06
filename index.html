@@ -10,10 +10,10 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kalendar.vlkmar.cz/">
 <meta property="og:locale" content="cs_CZ">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23F4F3EA'/%3E%3Cg transform='translate(3,17) scale(0.276)'%3E%3Cpath d='M6 54 Q15 66 24 53 Q33 39 42 53 Q50 65 58 51 L70 14 Q73 7 76 15 L86 78 Q89 88 93 78 L102 10 Q105 3 108 13 L116 62 Q120 74 126 60 Q132 46 140 54 Q148 62 156 48 Q164 36 174 50 Q182 62 192 50 Q198 43 204 50' stroke='%23015C4C' stroke-width='24' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ========== TOKENS ========== */
 :root {
@@ -71,7 +71,7 @@ em { font-style: italic; }
   border-bottom: 2px solid var(--ink);
 }
 .logo-mark { flex: none; display: flex; align-items: center; }
-.logo-mark svg { height: 36px; width: auto; display: block; }
+.logo-mark img { height: 36px; width: auto; display: block; }
 .masthead-title h1 { font-size: 27px; }
 .masthead-title h1 em { color: var(--crimson); }
 .masthead-title .tagline {
@@ -134,16 +134,21 @@ main[hidden] { display: none; }
 .lede em { color: var(--crimson); }
 .intro-sub { max-width: 560px; color: var(--ink-70); font-size: 15px; margin-top: 10px; }
 
-.funnel-block { display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, 330px); gap: 26px 44px; align-items: center; margin-top: 34px; padding: 20px 0 8px; border-top: var(--hair); }
-.funnel-block h3 { font-size: 25px; margin-bottom: 14px; }
-.funnel-block h3 em { color: var(--crimson); }
-.role-line { display: flex; align-items: baseline; gap: 12px; padding: 8px 0; }
+.intro-grid { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 22px 52px; align-items: start; }
+.role-card {
+  border: var(--hair); border-radius: 3px;
+  background: rgba(255, 255, 255, .35);
+  padding: 14px 18px 8px;
+  box-shadow: 3px 3px 0 rgba(31, 29, 24, .06);
+}
+.role-card h3 { font-size: 18px; }
+.role-card h3 em { color: var(--crimson); }
+.role-funnel { display: block; width: 78%; max-width: 230px; margin: 8px auto 4px; height: auto; }
+.role-line { display: flex; align-items: baseline; gap: 9px; padding: 7px 0; }
 .role-line + .role-line { border-top: var(--hair); }
-.role-swatch { width: 11px; height: 11px; flex: none; transform: translateY(1px); }
-.role-line b { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; min-width: 74px; }
-.role-line span { color: var(--ink-70); font-size: 14.5px; }
-.sketch { width: 100%; height: auto; display: block; }
-.sketch text { font-family: 'Caveat', 'Bradley Hand', cursive; font-size: 31px; font-weight: 600; }
+.role-swatch { width: 9px; height: 9px; flex: none; transform: translateY(.5px); }
+.role-line b { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; min-width: 52px; }
+.role-line span { color: var(--ink-70); font-size: 12.5px; line-height: 1.5; }
 
 .pillar-row { display: flex; gap: 14px; padding: 20px 2px 18px; border-bottom: var(--hair); }
 .p-dot { width: 13px; height: 13px; flex: none; margin-top: 13px; background: var(--c); box-shadow: 1.5px 1.5px 0 rgba(31, 29, 24, .2); }
@@ -158,10 +163,32 @@ main[hidden] { display: none; }
 }
 .p-name::placeholder { color: var(--ink-45); font-style: italic; }
 .p-name:focus { outline: none; border-color: var(--crimson); }
-.cpick { display: inline-flex; gap: 7px; align-items: center; }
-.cpick button { width: 17px; height: 17px; border-radius: 50%; background: var(--cc); transition: transform .12s var(--pop); }
-.cpick button:hover { transform: scale(1.18); }
-.cpick button.on { box-shadow: 0 0 0 2px var(--paper), 0 0 0 3.5px var(--ink); }
+.cpick { position: relative; display: inline-flex; }
+.c-cur {
+  width: 21px; height: 21px; border-radius: 50%;
+  background: var(--cc);
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--ink-14);
+  transition: transform .12s var(--pop), box-shadow .12s;
+}
+.c-cur:hover { transform: scale(1.1); box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--ink); }
+.c-pop {
+  position: absolute; top: calc(100% + 9px); right: -4px; z-index: 40;
+  display: grid; grid-template-columns: repeat(6, 24px); gap: 9px;
+  background: var(--paper);
+  border: 1px solid var(--ink); border-radius: 3px;
+  padding: 11px;
+  box-shadow: 3.5px 3.5px 0 rgba(31, 29, 24, .22);
+}
+.c-pop[hidden] { display: none; }
+.c-pop::before {
+  content: ''; position: absolute; top: -5px; right: 10px;
+  width: 8px; height: 8px; background: var(--paper);
+  border-left: 1px solid var(--ink); border-top: 1px solid var(--ink);
+  transform: rotate(45deg);
+}
+.c-pop button { width: 24px; height: 24px; border-radius: 50%; background: var(--cc); transition: transform .12s var(--pop); }
+.c-pop button:hover { transform: scale(1.18); }
+.c-pop button.on { box-shadow: 0 0 0 2px var(--paper), 0 0 0 3.5px var(--ink); }
 .p-controls { display: flex; align-items: center; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
 
 .topics { margin-top: 12px; display: grid; gap: 7px; }
@@ -401,8 +428,8 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
 @media (max-width: 640px) {
   .summary { grid-template-columns: 1fr; gap: 14px; }
   .p-del { margin-left: 0; }
-  .funnel-block { grid-template-columns: 1fr; gap: 16px; }
-  .funnel-block > div:last-child { max-width: 280px; margin: 0 auto; }
+  .intro-grid { grid-template-columns: 1fr; }
+  .role-card { max-width: 400px; }
 }
 
 /* fade-up entrance */
@@ -424,7 +451,7 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
 #print-sheet { font-family: var(--sans); color: #171512; }
 .pg-head { display: flex; align-items: center; gap: 5mm; padding-bottom: 3mm; border-bottom: .7mm solid #171512; }
 .pg-logo { flex: none; display: flex; align-items: center; }
-.pg-logo svg { height: 10mm; width: auto; display: block; }
+.pg-logo img { height: 10mm; width: auto; display: block; }
 .pg-title { font-family: var(--serif); font-size: 7.2mm; line-height: 1.05; }
 .pg-title em { color: var(--crimson); }
 .pg-month { font-family: var(--mono); font-size: 3.4mm; letter-spacing: .14em; text-transform: uppercase; margin-top: 1mm; color: #4a463f; }
@@ -474,10 +501,7 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
 <body>
 <header class="masthead">
   <div class="logo-mark" aria-hidden="true">
-    <svg viewBox="0 0 210 98" fill="none">
-      <path d="M6 54 Q15 66 24 53 Q33 39 42 53 Q50 65 58 51 L70 14 Q73 7 76 15 L86 78 Q89 88 93 78 L102 10 Q105 3 108 13 L116 62 Q120 74 126 60 Q132 46 140 54 Q148 62 156 48 Q164 36 174 50 Q182 62 192 50 Q198 43 204 50"
-        stroke="#015C4C" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+    <img src="logo.png" alt="">
   </div>
   <div class="masthead-title">
     <h1>Obsahový <em>kalendář</em></h1>
@@ -502,7 +526,10 @@ window.onerror = (m, src, line, col) => {
 /* LOGIC-START */
 'use strict';
 
-var PILLAR_COLORS = ['#02628C', '#015C4C', '#3F5C01', '#6413FC', '#015C1E', '#4F5151'];
+var PILLAR_COLORS = [
+  '#02628C', '#015C4C', '#3F5C01', '#6413FC', '#015C1E', '#4F5151',
+  '#980323', '#C24E00', '#A87900', '#2742C7', '#A1156E', '#6B4423'
+];
 var FUNNEL = { dosah: 'Dosah', duvera: 'Důvěra', prodej: 'Prodej' };
 var FORMATS = { video: 'Video', carousel: 'Carousel', text: 'Textový příspěvek' };
 var REPURPOSE = { carousel: 'Carousel', text: 'Text', newsletter: 'Newsletter' };
@@ -729,33 +756,6 @@ function esc(s) {
 }
 
 /* ---------- MIX VIEW ---------- */
-const FUNNEL_SKETCH = `
-<svg class="sketch" viewBox="0 0 460 400" role="img" aria-label="Marketingový trychtýř: nahoře Dosah, uprostřed Důvěra, dole Prodej">
-  <g fill="none" stroke="#1F1D18" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M66 54 Q230 34 407 28"/>
-    <path d="M401 22 Q380 82 351 148"/>
-    <path d="M362 143 Q230 160 99 136"/>
-    <path d="M109 144 Q88 100 71 46"/>
-    <path d="M134 199 Q235 183 337 179"/>
-    <path d="M331 175 Q315 226 289 279"/>
-    <path d="M299 274 Q230 286 161 261"/>
-    <path d="M172 268 Q155 232 139 191"/>
-    <path d="M190 319 Q240 305 293 307"/>
-    <path d="M288 303 Q269 342 245 377"/>
-    <path d="M249 372 Q222 349 193 313"/>
-  </g>
-  <g fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M58 170 Q66 130 90 108" stroke="#1F1D18"/>
-    <path d="M82 122 L90 106 L72 108" stroke="#1F1D18"/>
-    <path d="M388 214 Q366 240 328 236" stroke="#57534A"/>
-    <path d="M342 226 L326 236 L342 248" stroke="#57534A"/>
-    <path d="M142 352 Q166 356 190 348" stroke="#980323"/>
-    <path d="M176 340 L192 347 L178 358" stroke="#980323"/>
-  </g>
-  <text x="12" y="200" fill="#1F1D18">Dosah</text>
-  <text x="342" y="200" fill="#57534A">Důvěra</text>
-  <text x="42" y="356" fill="#980323">Prodej</text>
-</svg>`;
 
 function topicsHtml(p) {
   if (p.name.trim().length === 0) return '';
@@ -783,8 +783,12 @@ function renderMix() {
         <div class="p-head">
           <input class="p-name" type="text" maxlength="60" value="${esc(p.name)}"
             placeholder="Pilíř ${i + 1}" aria-label="Název pilíře ${i + 1}">
-          <span class="cpick" role="group" aria-label="Barva pilíře">
-            ${PILLAR_COLORS.map(cc => `<button type="button" data-color="${cc}" class="${p.color === cc ? 'on' : ''}" style="--cc:${cc}" aria-label="Barva pilíře ${cc}"></button>`).join('')}
+          <span class="cpick">
+            <button type="button" class="c-cur" data-open-colors aria-label="Změnit barvu pilíře"
+              aria-haspopup="true" aria-expanded="false" style="--cc:${p.color}"></button>
+            <span class="c-pop" hidden role="group" aria-label="Paleta barev">
+              ${PILLAR_COLORS.map(cc => `<button type="button" data-color="${cc}" class="${p.color === cc ? 'on' : ''}" style="--cc:${cc}" aria-label="Barva pilíře ${cc}"></button>`).join('')}
+            </span>
           </span>
         </div>
         <div class="p-controls">
@@ -806,20 +810,19 @@ function renderMix() {
 
   $('#view-mix').innerHTML = `
     <div class="sheet-col">
-      <section class="rise">
-        <h2 class="lede">Naplánuj si celý měsíc obsahu <em>za 10 minut</em>.</h2>
-        <p class="intro-sub">Nejdřív si navolíš, co tvoříš a v jakém poměru. Pak to na další stránce
-        rozložíš do kalendáře a vytiskneš nebo uložíš jako obrázek.</p>
-      </section>
-
-      <section class="funnel-block rise" style="animation-delay:80ms">
+      <section class="intro-grid rise">
         <div>
-          <h3>Tři role obsahu <em>v cestě k zákazníkovi</em></h3>
-          <div class="role-line"><span class="role-swatch" style="background:var(--ink)"></span><b>Dosah</b><span>zastaví lidi, kteří tě ještě neznají</span></div>
-          <div class="role-line"><span class="role-swatch" style="background:rgba(31,29,24,.42)"></span><b>Důvěra</b><span>ukazuje, jak přemýšlíš, a lidi se vracejí</span></div>
-          <div class="role-line"><span class="role-swatch" style="background:var(--crimson)"></span><b>Prodej</b><span>říká si o akci: poptávku, e-mail, nákup</span></div>
+          <h2 class="lede">Naplánuj si celý měsíc obsahu <em>za 10 minut</em>.</h2>
+          <p class="intro-sub">Nejdřív si navolíš, co tvoříš a v jakém poměru. Pak to na další stránce
+          rozložíš do kalendáře a vytiskneš nebo uložíš jako obrázek.</p>
         </div>
-        <div>${FUNNEL_SKETCH}</div>
+        <aside class="role-card" aria-label="Tři role obsahu">
+          <h3>Tři role obsahu <em>v cestě k zákazníkovi</em></h3>
+          <img class="role-funnel" src="funnel.png" alt="Ručně kreslený trychtýř: dosah, důvěra, prodej">
+          <div class="role-line"><span class="role-swatch" style="background:var(--ink)"></span><b>Dosah</b><span>Snažíš se zaujmout lidi, kteří tě ještě neznají.</span></div>
+          <div class="role-line"><span class="role-swatch" style="background:rgba(31,29,24,.42)"></span><b>Důvěra</b><span>Představuje tvé uvažování a buduje vztah, takže se rádi vracejí.</span></div>
+          <div class="role-line"><span class="role-swatch" style="background:var(--crimson)"></span><b>Prodej</b><span>Ukazuje, jak funguje tvé řešení, a odstraňuje bariéry k nákupu.</span></div>
+        </aside>
       </section>
 
       <div class="sec-label"><span class="n">01</span> Tvoje pilíře</div>
@@ -873,6 +876,11 @@ function updateTopicsRow(row, pillarId) {
   if (html) row.querySelector('.p-main').insertAdjacentHTML('beforeend', html);
 }
 
+function closeColorPops() {
+  document.querySelectorAll('.c-pop:not([hidden])').forEach(pop => pop.setAttribute('hidden', ''));
+  document.querySelectorAll('[data-open-colors][aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded', 'false'));
+}
+
 function bindMix() {
   const view = $('#view-mix');
   view.addEventListener('input', e => {
@@ -902,6 +910,13 @@ function bindMix() {
         if (e.target.dataset.act === 'inc') incCount(state, id); else decCount(state, id);
         syncCards(state); renderMix(); return;
       }
+      if (e.target.hasAttribute('data-open-colors')) {
+        const pop = e.target.nextElementSibling;
+        const wasHidden = pop.hasAttribute('hidden');
+        closeColorPops();
+        if (wasHidden) { pop.removeAttribute('hidden'); e.target.setAttribute('aria-expanded', 'true'); }
+        return;
+      }
       if (e.target.dataset.color) {
         setPillarColor(state, id, e.target.dataset.color);
         renderMix(); return;
@@ -918,6 +933,12 @@ function bindMix() {
     }
     if (e.target.id === 'add-pillar') { addPillar(state); syncCards(state); renderMix(); }
     if (e.target.id === 'go-cal') { goToCalendar(); }
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.cpick')) closeColorPops();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeColorPops();
   });
 }
 
@@ -1227,7 +1248,7 @@ function renderPrintSheet() {
 
   $('#print-sheet').innerHTML = `
     <div class="pg-head">
-      <span class="pg-logo"><svg viewBox="0 0 210 98" fill="none"><path d="M6 54 Q15 66 24 53 Q33 39 42 53 Q50 65 58 51 L70 14 Q73 7 76 15 L86 78 Q89 88 93 78 L102 10 Q105 3 108 13 L116 62 Q120 74 126 60 Q132 46 140 54 Q148 62 156 48 Q164 36 174 50 Q182 62 192 50 Q198 43 204 50" stroke="#015C4C" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="pg-logo"><img src="logo.png" alt=""></span>
       <div>
         <div class="pg-title">Obsahový <em>kalendář</em></div>
         <div class="pg-month">${meta.label}</div>
@@ -1263,8 +1284,18 @@ function doPrint() {
 }
 
 /* Export do PNG: print sheet kreslený přímo na canvas 2D.
-   (foreignObject → canvas Chrome taintuje, proto ruční kreslení.) */
-var LOGO_PATH_D = 'M6 54 Q15 66 24 53 Q33 39 42 53 Q50 65 58 51 L70 14 Q73 7 76 15 L86 78 Q89 88 93 78 L102 10 Q105 3 108 13 L116 62 Q120 74 126 60 Q132 46 140 54 Q148 62 156 48 Q164 36 174 50 Q182 62 192 50 Q198 43 204 50';
+   (foreignObject → canvas Chrome taintuje, proto ruční kreslení.)
+   Logo = stejný soubor jako v hlavičce; same-origin, canvas nezataintuje. */
+var logoImg = null;
+function ensureLogo() {
+  return new Promise(resolve => {
+    if (logoImg) return resolve();
+    const im = new Image();
+    im.onload = () => { logoImg = im; resolve(); };
+    im.onerror = () => resolve(); // bez loga se list vykreslí i tak
+    im.src = 'logo.png';
+  });
+}
 
 function wrapText(cx, text, maxW, maxLines) {
   const words = text.split(/\s+/);
@@ -1300,12 +1331,11 @@ function drawSheet(cx, W, H) {
   cx.textBaseline = 'alphabetic';
 
   // hlavička: logo + titul + měsíc + celkem
-  cx.save();
-  cx.translate(PAD, PAD - 2); cx.scale(0.42, 0.42);
-  cx.strokeStyle = TEAL; cx.lineWidth = 7; cx.lineCap = 'round'; cx.lineJoin = 'round';
-  cx.stroke(new Path2D(LOGO_PATH_D));
-  cx.restore();
-  const titleX = PAD + 104;
+  if (logoImg) {
+    const lh = 40, lw = Math.round(lh * logoImg.naturalWidth / logoImg.naturalHeight);
+    cx.drawImage(logoImg, PAD, PAD - 8, lw, lh);
+  }
+  const titleX = PAD + 88;
   cx.fillStyle = INK; cx.font = '27px "Instrument Serif", Georgia, serif';
   cx.fillText('Obsahový ', titleX, PAD + 24);
   const obsW = cx.measureText('Obsahový ').width;
@@ -1461,6 +1491,7 @@ async function exportImage(skipConfirm) {
       document.fonts.load('700 11px "Space Grotesk"'), document.fonts.load('500 10px "Space Grotesk"')
     ]).catch(() => {});
     await document.fonts.ready;
+    await ensureLogo();
     dbg('step:fonts');
     const MM = 96 / 25.4, W = Math.round(297 * MM), H = Math.round(210 * MM), S = 2;
     const canvas = document.createElement('canvas');

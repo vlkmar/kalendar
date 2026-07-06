@@ -115,6 +115,15 @@ T('setPillarColor: jen barvy z palety', () => {
   ctx.setPillarColor(s, p.id, '#ff0000');
   assert.equal(p.color, ctx.PILLAR_COLORS[3], 'mimo paletu se ignoruje');
 });
+T('paleta: 12 unikátních barev vč. červené/oranžové/žluté', () => {
+  assert.equal(ctx.PILLAR_COLORS.length, 12);
+  assert.equal(new Set(ctx.PILLAR_COLORS).size, 12);
+  for (const c of ['#980323', '#C24E00', '#A87900']) assert.ok(ctx.PILLAR_COLORS.includes(c), c + ' v paletě');
+  const s = ctx.createState('2026-07-05');
+  const p = ctx.addPillar(s);
+  ctx.setPillarColor(s, p.id, '#C24E00');
+  assert.equal(p.color, '#C24E00');
+});
 T('cardsForPillar: seřazené dle id', () => {
   const s = ctx.createState('2026-07-05');
   const p = ctx.addPillar(s); ctx.renamePillar(s, p.id, 'Řazení'); ctx.syncCards(s);
