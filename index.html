@@ -134,21 +134,40 @@ main[hidden] { display: none; }
 .lede em { color: var(--crimson); }
 .intro-sub { max-width: 560px; color: var(--ink-70); font-size: 15px; margin-top: 10px; }
 
-.intro-grid { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 22px 52px; align-items: start; }
+/* Intro vlevo, karta rolí vpravo. Band se levým okrajem srovná s centrovaným
+   sheet-colem (860/2 = 430) a vpravo sahá až k okraji stránky. */
+.intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 430px) minmax(0, 1fr);
+  gap: 20px 46px;
+  align-items: start;
+  margin-left: max(0px, calc(50% - 430px));
+  margin-bottom: 8px;
+}
 .role-card {
   border: var(--hair); border-radius: 3px;
   background: rgba(255, 255, 255, .35);
-  padding: 14px 18px 8px;
+  padding: 15px 22px 13px;
   box-shadow: 3px 3px 0 rgba(31, 29, 24, .06);
 }
-.role-card h3 { font-size: 18px; }
+.role-card h3 { font-size: 19px; margin-bottom: 8px; }
 .role-card h3 em { color: var(--crimson); }
-.role-funnel { display: block; width: 78%; max-width: 230px; margin: 8px auto 4px; height: auto; }
-.role-line { display: flex; align-items: baseline; gap: 9px; padding: 7px 0; }
+.role-inner { display: grid; grid-template-columns: 185px minmax(0, 1fr); gap: 6px 26px; align-items: center; }
+.role-funnel { display: block; width: 100%; max-width: 200px; height: auto; margin: 0 auto; }
+.role-lines { display: flex; flex-direction: column; }
+.role-line { display: flex; align-items: baseline; gap: 10px; padding: 8px 0; }
 .role-line + .role-line { border-top: var(--hair); }
 .role-swatch { width: 9px; height: 9px; flex: none; transform: translateY(.5px); }
-.role-line b { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; min-width: 52px; }
-.role-line span { color: var(--ink-70); font-size: 12.5px; line-height: 1.5; }
+.role-line b { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; min-width: 58px; }
+.role-line span { color: var(--ink-70); font-size: 13px; line-height: 1.5; }
+@media (max-width: 820px) {
+  .intro-grid { grid-template-columns: 1fr; margin-left: 0; gap: 16px; }
+}
+@media (max-width: 560px) {
+  .role-inner { grid-template-columns: 1fr; justify-items: center; }
+  .role-funnel { max-width: 240px; margin-bottom: 4px; }
+  .role-lines { width: 100%; }
+}
 
 .pillar-row { display: flex; gap: 14px; padding: 20px 2px 18px; border-bottom: var(--hair); }
 .p-dot { width: 13px; height: 13px; flex: none; margin-top: 13px; background: var(--c); box-shadow: 1.5px 1.5px 0 rgba(31, 29, 24, .2); }
@@ -428,8 +447,6 @@ body.placing .cell:not(.off):hover, .cell.drop-hot, .a-day.drop-hot { background
 @media (max-width: 640px) {
   .summary { grid-template-columns: 1fr; gap: 14px; }
   .p-del { margin-left: 0; }
-  .intro-grid { grid-template-columns: 1fr; }
-  .role-card { max-width: 400px; }
 }
 
 /* fade-up entrance */
@@ -766,7 +783,7 @@ function topicsHtml(p) {
       <div class="topic-row" data-card="${c.id}">
         <span class="t-n num">${ti + 1}.</span>
         <input class="topic-in" type="text" maxlength="120" value="${esc(c.idea)}"
-          placeholder="Téma ${ti + 1}" aria-label="Téma ${ti + 1}">
+          placeholder="Název videa ${ti + 1}" aria-label="Název videa ${ti + 1}">
         ${c.date ? '<span class="placed-tag">v kalendáři</span>' : ''}
         <span class="rp-group"><span class="rp-lbl">Použít i na</span>${Object.keys(REPURPOSE).map(k =>
           `<button type="button" class="rp-chip${c.repurpose.includes(k) ? ' on' : ''}" data-rp="${k}">${REPURPOSE[k]}</button>`).join('')}
@@ -782,7 +799,7 @@ function renderMix() {
       <div class="p-main">
         <div class="p-head">
           <input class="p-name" type="text" maxlength="60" value="${esc(p.name)}"
-            placeholder="Pilíř ${i + 1}" aria-label="Název pilíře ${i + 1}">
+            placeholder="Zde napiš název pilíře ${i + 1}" aria-label="Název pilíře ${i + 1}">
           <span class="cpick">
             <button type="button" class="c-cur" data-open-colors aria-label="Změnit barvu pilíře"
               aria-haspopup="true" aria-expanded="false" style="--cc:${p.color}"></button>
@@ -809,22 +826,26 @@ function renderMix() {
     </div>`).join('');
 
   $('#view-mix').innerHTML = `
-    <div class="sheet-col">
-      <section class="intro-grid rise">
-        <div>
-          <h2 class="lede">Naplánuj si celý měsíc obsahu <em>za 10 minut</em>.</h2>
-          <p class="intro-sub">Nejdřív si navolíš, co tvoříš a v jakém poměru. Pak to na další stránce
-          rozložíš do kalendáře a vytiskneš nebo uložíš jako obrázek.</p>
-        </div>
-        <aside class="role-card" aria-label="Tři role obsahu">
-          <h3>Tři role obsahu <em>v cestě k zákazníkovi</em></h3>
+    <section class="intro-grid rise">
+      <div>
+        <h2 class="lede">Naplánuj si celý měsíc obsahu <em>za 10 minut</em>.</h2>
+        <p class="intro-sub">Nejdřív si navolíš, co tvoříš a v jakém poměru. Pak to na další stránce
+        rozložíš do kalendáře a vytiskneš nebo uložíš jako obrázek.</p>
+      </div>
+      <aside class="role-card" aria-label="Tři role obsahu">
+        <h3>Tři role obsahu <em>v cestě k zákazníkovi</em></h3>
+        <div class="role-inner">
           <img class="role-funnel" src="funnel.png" alt="Ručně kreslený trychtýř: dosah, důvěra, prodej">
-          <div class="role-line"><span class="role-swatch" style="background:var(--ink)"></span><b>Dosah</b><span>Snažíš se zaujmout lidi, kteří tě ještě neznají.</span></div>
-          <div class="role-line"><span class="role-swatch" style="background:rgba(31,29,24,.42)"></span><b>Důvěra</b><span>Představuje tvé uvažování a buduje vztah, takže se rádi vracejí.</span></div>
-          <div class="role-line"><span class="role-swatch" style="background:var(--crimson)"></span><b>Prodej</b><span>Ukazuje, jak funguje tvé řešení, a odstraňuje bariéry k nákupu.</span></div>
-        </aside>
-      </section>
+          <div class="role-lines">
+            <div class="role-line"><span class="role-swatch" style="background:var(--ink)"></span><b>Dosah</b><span>Snažíš se zaujmout lidi, kteří tě ještě neznají.</span></div>
+            <div class="role-line"><span class="role-swatch" style="background:rgba(31,29,24,.42)"></span><b>Důvěra</b><span>Představuje tvé uvažování a buduje vztah, takže se rádi vracejí.</span></div>
+            <div class="role-line"><span class="role-swatch" style="background:var(--crimson)"></span><b>Prodej</b><span>Ukazuje, jak funguje tvé řešení, a odstraňuje bariéry k nákupu.</span></div>
+          </div>
+        </div>
+      </aside>
+    </section>
 
+    <div class="sheet-col">
       <div class="sec-label"><span class="n">01</span> Tvoje pilíře</div>
       <section id="pillar-list">${rows}</section>
       <div class="add-row">
@@ -1030,7 +1051,7 @@ function renderCal() {
       <button type="button" id="cancel-pick">zrušit</button></div>` : ''}
     <section class="tray-wrap">
       <div class="tray-head">
-        <span class="t-lbl">Zásobník</span>
+        <span class="t-lbl">Tvůj plánovaný obsah</span>
         <span class="t-progress">umístěno <b>${pr.placed}</b>/${pr.total}</span>
       </div>
       ${trayHtml}
